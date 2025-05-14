@@ -1,7 +1,8 @@
 import java.util.ArrayList;
+import column.Column;
 
 public class DataFrame {
-    private ArrayList <Rows> rows ;
+    //private ArrayList <Rows> rows ;
     private ArrayList<Column> columns;
     private int numRow;
     private int numCol ;
@@ -23,6 +24,4 @@ public class DataFrame {
     }
 
     
-
-
 }
