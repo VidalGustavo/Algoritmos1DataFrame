@@ -1,4 +1,4 @@
-package column;
+package Column;
 
 import java.util.ArrayList;
 import celda.Celda;
@@ -33,7 +33,7 @@ public class Column<Celda> {
         this.name = name;
     }
 
-    protected boolean validateType(T value){
+    public boolean validateType(Object value){
         //valida que un valor se pueda agregar a la columna, segun el tipo de este.
         if (value instanceof String && this.tipoCelda == TIPOSCELDA.STRING) {
             return true;
