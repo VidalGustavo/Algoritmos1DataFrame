@@ -5,21 +5,31 @@ import java.util.ArrayList;
 import Column.Column;
 import celda.Celda;
 import column.Column;
+import celda.Celda;
 
-public class DataFrame {
+public class DataFrame<T> {
     //private ArrayList <Rows> rows ;
-    private ArrayList<Column> columns;
+    private ArrayList<Column<Celda<T>>> columns;
     private int numRow;
     private int numCol ;
     
 
-
-    public DataFrame(ArrayList lista)  {
-        // Si inicializa vacio asume que es una columna     
-        this.numCol = numCol;
-        this.columns = columns;
+    public DataFrame() {
+        this.columns = new ArrayList<Column<CeldaString>>();
+        this.numRow = 0;
+        this.numCol = 0;
     }
-    public DataFrame(ArrayList <ArrayList <Object> ){
+    public DataFrame(ArrayList<Column<T>> lista)  {
+        // Empecemos con las validaciones
+        // Validar que los largos de los arrays son iguales
+
+        
+        this.numCol = columns.size();
+        this.numRow = columns.get(0).getSize();
+
+    }    
+
+    public DataFrame(ArrayList<ArrayList<T>>){
 
             }
     
