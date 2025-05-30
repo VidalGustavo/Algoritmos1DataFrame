@@ -1,10 +1,13 @@
-package column;
+package Column;
 
 import java.util.ArrayList;
 import celda.Celda;
+import celda.CeldaString;
+import celda.CeldaNumber;
+import celda.CeldaBoolean;
 
-public class Column<Celda> {
-    private ArrayList<Celda> list;
+public class Column<T> {
+    private ArrayList<Celda<T>> list;
     private String name;
     private int size;
     private static enum TIPOSCELDA {
@@ -12,6 +15,22 @@ public class Column<Celda> {
     }
     private TIPOSCELDA tipoCelda;
 
+    // Constructores
+    public Column() {
+        this.name = "EmptyStrings";
+        this.tipoCelda = TIPOSCELDA.STRING;
+        this.list = new ArrayList<CeldaString<String>();
+        this.size = 0;
+    }
+
+    public Column(String name, TIPOSCELDA tipoCelda, ArrayList<Celda<T>> list) {
+        this.name = name;
+        this.tipoCelda = tipoCelda;
+        this.list = list;
+        this.size = list.size();
+    }
+
+    // Getters y Setters
     public String getName() {
         // TODO: revisar si corresponde inmutabilidad
         String name = new String(this.name);
@@ -20,8 +39,8 @@ public class Column<Celda> {
     public int getSize() {
         return this.size;
     }
-    public ArrayList<Celda> getList() {
-        // TODO: revisar si corresponde inmutabilidad 
+    public ArrayList<Celda<T>> getList() {
+        // TODO: revisar si corresponde inmutabilidad
         return this.list;
     }
     public String getTipoCelda() {
@@ -33,7 +52,7 @@ public class Column<Celda> {
         this.name = name;
     }
 
-    protected boolean validateType(T value){
+    public boolean validateType(Object value){
         //valida que un valor se pueda agregar a la columna, segun el tipo de este.
         if (value instanceof String && this.tipoCelda == TIPOSCELDA.STRING) {
             return true;
