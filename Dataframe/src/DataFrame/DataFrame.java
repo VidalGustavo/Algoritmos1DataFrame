@@ -2,10 +2,9 @@ package DataFrame;
 
 import java.util.ArrayList;
 
-import Column.Column;
-import celda.Celda;
 import column.Column;
 import celda.Celda;
+import celda.CeldaString;
 
 public class DataFrame<T> {
     //private ArrayList <Rows> rows ;
@@ -29,14 +28,14 @@ public class DataFrame<T> {
 
     }    
 
-    public DataFrame(ArrayList<ArrayList<T>>){
+    // public DataFrame(ArrayList<ArrayList<T>>){
 
-            }
+    //         }
     
 
-    public DataFrame (String) {
+    // public DataFrame (String) {
 
-    }
+    // }
 
     //getter de celdas si se le ingresan ambos parámetros como ints
     public Celda getCelda(int row, int column){
