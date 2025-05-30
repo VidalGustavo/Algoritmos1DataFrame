@@ -1,4 +1,4 @@
-package Celda;
+package celda;
 
 public class CeldaString extends Celda<String> {
 

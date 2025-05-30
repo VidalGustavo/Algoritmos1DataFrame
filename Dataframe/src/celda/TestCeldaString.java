@@ -1,5 +1,5 @@
-import Celda.Celda;
-import Celda.CeldaString;
+import celda.Celda;
+import celda.CeldaString;
 
 public class TestCeldaString {
     public static void main(String[] args) {
