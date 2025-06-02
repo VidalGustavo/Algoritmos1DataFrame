@@ -1,10 +1,8 @@
 package Column;
 
 import java.util.ArrayList;
-import celda.Celda;
-import celda.CeldaString;
-import celda.CeldaNumber;
-import celda.CeldaBoolean;
+import Celda.Celda;
+import Celda.CeldaString;
 
 public class Column<T> {
     private ArrayList<Celda<T>> list;
@@ -16,18 +14,24 @@ public class Column<T> {
     private TIPOSCELDA tipoCelda;
 
     // Constructores
-    public Column() {
-        this.name = "EmptyStrings";
-        this.tipoCelda = TIPOSCELDA.STRING;
-        this.list = new ArrayList<CeldaString<String>();
-        this.size = 0;
-    }
+//    public Column() {
+//        this.name = "EmptyStrings";
+//        this.tipoCelda = TIPOSCELDA.STRING;
+//        this.list = new ArrayList<CeldaString<String>>();
+//        this.size = 0;
+//    }
 
     public Column(String name, TIPOSCELDA tipoCelda, ArrayList<Celda<T>> list) {
         this.name = name;
         this.tipoCelda = tipoCelda;
         this.list = list;
         this.size = list.size();
+    }
+
+    public Column(ArrayList<Celda<T>> list){
+        this.list = list;
+        name = String.valueOf(list.get(0).getValue());
+        size = list.size();
     }
 
     // Getters y Setters
