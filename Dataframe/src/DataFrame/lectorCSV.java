@@ -113,7 +113,7 @@ public class lectorCSV {
             celdas = parsearLineas(lineasLeidas, ",");
             return crearDataframe(celdas);
         } catch (RuntimeException e) {
-            System.out.println("");
+            System.out.println(e);
             return null;
         }
     }
