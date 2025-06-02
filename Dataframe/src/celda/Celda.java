@@ -1,4 +1,4 @@
-package celda;
+package Celda;
 
 public abstract class Celda<T> {
     protected T value;

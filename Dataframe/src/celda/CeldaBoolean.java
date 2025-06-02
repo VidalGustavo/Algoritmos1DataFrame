@@ -1,4 +1,4 @@
-package celda;
+package Celda;
 
 
 public class CeldaBoolean extends Celda<Boolean> {

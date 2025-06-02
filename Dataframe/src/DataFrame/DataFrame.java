@@ -2,9 +2,9 @@ package DataFrame;
 
 import java.util.ArrayList;
 
-import column.Column;
-import celda.Celda;
-import celda.CeldaString;
+import Column.Column;
+import Celda.Celda;
+import Celda.CeldaString;
 
 public class DataFrame<T> {
     //private ArrayList <Rows> rows ;

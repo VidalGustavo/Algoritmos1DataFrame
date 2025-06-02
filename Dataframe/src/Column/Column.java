@@ -1,10 +1,12 @@
 package Column;
 
 import java.util.ArrayList;
-import celda.Celda;
-import celda.CeldaString;
-import celda.CeldaNumber;
-import celda.CeldaBoolean;
+
+import Celda.Celda;
+import Celda.CeldaBoolean;
+import Celda.CeldaNumber;
+import Celda.CeldaString;
+import DataFrame.DataFrame;
 
 public class Column<T> {
     private ArrayList<Celda<T>> list;
