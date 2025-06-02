@@ -1,12 +1,10 @@
 package Column;
 
 import java.util.ArrayList;
-
 import Celda.Celda;
-import Celda.CeldaBoolean;
-import Celda.CeldaNumber;
 import Celda.CeldaString;
-import DataFrame.DataFrame;
+import Celda.CeldaNumber;
+import Celda.CeldaBoolean;
 
 public class Column<T> {
     private ArrayList<Celda<T>> list;
@@ -30,6 +28,29 @@ public class Column<T> {
         this.tipoCelda = tipoCelda;
         this.list = list;
         this.size = list.size();
+    }
+
+    public Column(ArrayList<Celda<T>> list) throws IllegalArgumentException {
+        name = String.valueOf(list.get(0).getValue());
+
+        // Define tipo celda.
+        if (list.get(1) instanceof CeldaString) {
+            tipoCelda = TIPOSCELDA.STRING;
+        } else if (list.get(1) instanceof CeldaNumber) {
+            tipoCelda = TIPOSCELDA.NUMBER;
+        } else if (list.get(1) instanceof CeldaBoolean) {
+            tipoCelda = TIPOSCELDA.BOOLEAN;
+        } else {
+            throw new IllegalArgumentException("Tipo de celda no soportado");
+        }
+        // Valida celdas para el tipo de columna.
+        for (int i=1; i < list.size(); i++) {
+            if (!this.validateType(list.get(i).getValue())){
+               throw new IllegalArgumentException("Tipo de celda en el indice " + i + " no coincide con el tipo de columna.");
+            }
+        }
+        this.list = list;
+        size = list.size()-1;
     }
 
     // Getters y Setters

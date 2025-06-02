@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import Column.Column;
 import Celda.Celda;
-import Celda.CeldaString;
 
 public class DataFrame<T> {
     //private ArrayList <Rows> rows ;
@@ -14,17 +13,24 @@ public class DataFrame<T> {
     
 
     public DataFrame() {
-        this.columns = new ArrayList<Column<CeldaString>>();
-        this.numRow = 0;
-        this.numCol = 0;
+        columns = new ArrayList<Column<Celda<T>>>();
+        numRow = 0;
+        numCol = 0;
     }
+
+    public DataFrame(int numRow, int numCol) {
+        columns = new ArrayList<Column<Celda<T>>>();
+        this.numRow = numRow;
+        this.numCol = numCol;
+    }
+
     public DataFrame(ArrayList<Column<T>> lista)  {
         // Empecemos con las validaciones
         // Validar que los largos de los arrays son iguales
 
         
-        this.numCol = columns.size();
-        this.numRow = columns.get(0).getSize();
+        numCol = columns.size();
+        numRow = columns.get(0).getSize();
 
     }    
 
@@ -37,6 +43,10 @@ public class DataFrame<T> {
 
     // }
 
+    public void addColumn(Column column){
+        columns.add(column);
+    }
+
     //getter de celdas si se le ingresan ambos parámetros como ints
     public Celda getCelda(int row, int column){
         //Verifico que los índices sean válidos
@@ -48,7 +58,7 @@ public class DataFrame<T> {
         }
         //Busco la columna y luego la celda
         Column columna = columns.get(column);
-        Celda celda = columna.getList().get(row);
+        Celda celda = (Celda) columna.getList().get(row);
         return celda;
     }
 
