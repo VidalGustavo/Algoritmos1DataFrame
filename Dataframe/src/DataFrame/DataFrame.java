@@ -99,7 +99,7 @@ public class DataFrame<T> {
     }
 
     //setter de celda si ambos labels son índices numéricos
-    public void setCelda(int row, int column, Object value){
+    public void setCelda(int row, int column, T value){
         //Verifico que los índices sean válidos
         if(column < 0 || column >= this.numCol){
             throw new IndexOutOfBoundsException("Índice de columna inválido:" + column);
@@ -112,11 +112,11 @@ public class DataFrame<T> {
             throw new IllegalArgumentException("Tipo de valor inválido para esta columna.")
         }
         //Busco la celda y le cambio el valor
-        this.columns.get(column).getList().get(row).setValor(value);
+        columns.get(column).getList().get(row).setValue(value);
     }
 
     //setter de celda si el label de la fila es un índice numérico y el de la columna un string
-    public void setCelda(int row, String column, Object value){
+    public void setCelda(int row, String column, T value){
         //Verifico que el índice sea válido
         if(row < 0 || row >= this.numRow){
             throw new IndexOutOfBoundsException("Índice de fila inválido:" + row);
@@ -127,11 +127,11 @@ public class DataFrame<T> {
             throw new IllegalArgumentException("Tipo de valor inválido para esta columna.")
         }
         //Busco la celda y le cambio el valor
-        this.columns.get(colIndex).getList().get(row).setValor(value);
+        this.columns.get(colIndex).getList().get(row).setValue(value);
     }
 
     //setter de celda si el label de la columna es un índice numérico y el de la fila un string
-    public void setCelda(String row, int column, Object value){
+    public void setCelda(String row, int column, T value){
         //Verifico que el índice sea válido
         if(column < 0 || column >= this.numCol){
             throw new IndexOutOfBoundsException("Índice de columna inválido:" + column);
@@ -142,11 +142,11 @@ public class DataFrame<T> {
             throw new IllegalArgumentException("Tipo de valor inválido para esta columna.")
         }
         //Busco la celda y le cambio el valor
-        this.columns.get(column).getList().get(rowIndex).setValor(value);
+        this.columns.get(column).getList().get(rowIndex).setValue(value);
     }
 
     //setter de celda si ambos labels son strings
-    public void setCelda(String row, int column, Object value){
+    public void setCelda(String row, int column, T value){
         int colIndex = colLabelToIndex(column);
         int rowIndex = rowLabelToIndex(row);
         //Verifico que el tipo del objeto sea válido para esta columna
@@ -154,7 +154,7 @@ public class DataFrame<T> {
             throw new IllegalArgumentException("Tipo de valor inválido para esta columna.")
         }
         //Busco la celda y le cambio el valor
-        this.columns.get(colIndex).getList().get(rowIndex).setValor(value);
+        this.columns.get(colIndex).getList().get(rowIndex).setValue(value);
     }
 
 }
