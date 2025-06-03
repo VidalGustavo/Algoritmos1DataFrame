@@ -71,7 +71,7 @@ public class DataFrame<T> {
         int colIndex = colLabelToIndex(column);
         //Busco la columna y luego la celda
         Column columna = columns.get(colIndex);
-        Celda celda = columna.getList().get(row);
+        Celda celda = (Celda) columna.getList().get(row);
         return celda;
     }
 
@@ -84,7 +84,7 @@ public class DataFrame<T> {
         int rowIndex = rowLabelToIndex(row);
         //Busco la columna y luego la celda
         Column columna = columns.get(column);
-        Celda celda = columna.getList().get(rowIndex);
+        Celda celda = (Celda) columna.getList().get(rowIndex);
         return celda;
     }
 
@@ -94,7 +94,7 @@ public class DataFrame<T> {
         int rowIndex = rowLabelToIndex(row);
         //Busco la columna y luego la celda
         Column columna = columns.get(colIndex);
-        Celda celda = columna.getList().get(rowIndex);
+        Celda celda = (Celda) columna.getList().get(rowIndex);
         return celda;
     }
 

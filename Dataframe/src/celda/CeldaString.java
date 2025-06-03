@@ -1,7 +1,5 @@
 package Celda;
 
-public class CeldaString extends Celda {
-
 public class CeldaString extends Celda<String> {
 
     public CeldaString(String value) {
