@@ -86,6 +86,7 @@ public class Column<T> {
         } else {
             return false; // Tipo no valido
         }
-    };
+    }
+    
 
 }
