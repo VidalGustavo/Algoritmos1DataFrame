@@ -6,10 +6,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-public class ExpoCSV implements Exportador {
+public class ExpoCSV<T> implements Exportador {
     
     @Override
-    public void expoCSV(DataFrame dataframe, String nombreArchivo) {
+    public void expo(DataFrame<T> dataframe, String nombreArchivo) {
         if (dataframe == null || dataframe.getColumns().isEmpty()) {
             System.err.println("El DataFrame está vacío o no tiene columnas.");
             return;
@@ -27,7 +27,8 @@ public class ExpoCSV implements Exportador {
                 if (i < dataframe.getColumns().size() - 1) {
                     writer.write(",");
                 }
-            }
+            }// se usa ? y no T porque no sabes que tipo de dato es
+            // estamos parados en tiempo de compilación
             writer.write("\n");
             
             // Escribir datos

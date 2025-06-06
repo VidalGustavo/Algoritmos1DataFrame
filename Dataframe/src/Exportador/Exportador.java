@@ -4,5 +4,5 @@ import DataFrame.DataFrame;
 // y dataframe no es generico, pero entiendo 
 // que se solucionará en breve eso. 
 public interface Exportador<T> {
-    void expoCSV(DataFrame<T> dataframe, String nombreArchivo);
+    void expo(DataFrame<T> dataframe, String nombreArchivo);
 }
