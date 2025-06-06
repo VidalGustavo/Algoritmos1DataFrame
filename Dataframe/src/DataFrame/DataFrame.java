@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import Column.Column;
 import Celda.Celda;
 
-public class DataFrame<T> {
+public class DataFrame {
     //private ArrayList <Rows> rows ;
-    private ArrayList<Column<Celda<T>>> columns;
+    private ArrayList<Column<Celda<?>>> columns;
     private int numRow;
     private int numCol ;
     
