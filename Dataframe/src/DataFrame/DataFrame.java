@@ -1,13 +1,14 @@
 package DataFrame;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import Column.Column;
 import Celda.Celda;
 
 public class DataFrame<T> {
     //private ArrayList <Rows> rows ;
-    private ArrayList<Column<Celda<T>>> columns;
+    private ArrayList<Column<Celda<>>> columns;
     private int numRow;
     private int numCol ;
     
@@ -156,5 +157,7 @@ public class DataFrame<T> {
         //Busco la celda y le cambio el valor
         this.columns.get(colIndex).getList().get(rowIndex).setValue(value);
     }
+    
+}
 
 }

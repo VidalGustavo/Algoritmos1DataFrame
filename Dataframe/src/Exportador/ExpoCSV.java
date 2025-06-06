@@ -1,12 +1,13 @@
 package Exportador;
 import DataFrame.DataFrame;
-
+import Column.Column;
+import Celda.Celda;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-public class ExpoCSV<T> implements Exportador {
+public class ExpoCSV<T> implements Exportador<T> {
     
     @Override
     public void expo(DataFrame<T> dataframe, String nombreArchivo) {
