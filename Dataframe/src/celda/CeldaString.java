@@ -1,4 +1,4 @@
-package Celda;
+package celda;
 
 public class CeldaString extends Celda<String> {
 
@@ -6,7 +6,7 @@ public class CeldaString extends Celda<String> {
         super(value);
     }
 
-    // Puedes agregar métodos específicos para String si lo necesitas
+    
     public String getValue() {
         return super.getValue();
     }
