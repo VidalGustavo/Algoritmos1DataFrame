@@ -5,12 +5,11 @@ import Celda.Celda;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 
-public class ExpoCSV<T> implements Exportador<T> {
+public class ExpoCSV implements Exportador {
     
     @Override
-    public void expo(DataFrame<T> dataframe, String nombreArchivo) {
+    public void expo(DataFrame dataframe, String nombreArchivo) {
         if (dataframe == null || dataframe.getColumns().isEmpty()) {
             System.err.println("El DataFrame está vacío o no tiene columnas.");
             return;

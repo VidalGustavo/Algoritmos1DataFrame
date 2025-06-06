@@ -14,18 +14,18 @@ public class DataFrame {
     
 
     public DataFrame() {
-        columns = new ArrayList<Column<Celda<T>>>();
+        columns = new ArrayList<Column<Celda<?>>>();
         numRow = 0;
         numCol = 0;
     }
 
     public DataFrame(int numRow, int numCol) {
-        columns = new ArrayList<Column<Celda<T>>>();
+        columns = new ArrayList<Column<Celda<?>>>();
         this.numRow = numRow;
         this.numCol = numCol;
     }
 
-    public DataFrame(ArrayList<Column<T>> lista)  {
+    public DataFrame(ArrayList<Column<?>> lista)  {
         // Empecemos con las validaciones
         // Validar que los largos de los arrays son iguales
 
@@ -100,7 +100,7 @@ public class DataFrame {
     }
 
     //setter de celda si ambos labels son índices numéricos
-    public void setCelda(int row, int column, T value){
+    public void setCelda(int row, int column, Object value){
         //Verifico que los índices sean válidos
         if(column < 0 || column >= this.numCol){
             throw new IndexOutOfBoundsException("Índice de columna inválido:" + column);
@@ -117,7 +117,7 @@ public class DataFrame {
     }
 
     //setter de celda si el label de la fila es un índice numérico y el de la columna un string
-    public void setCelda(int row, String column, T value){
+    public void setCelda(int row, String column, Object value){
         //Verifico que el índice sea válido
         if(row < 0 || row >= this.numRow){
             throw new IndexOutOfBoundsException("Índice de fila inválido:" + row);
@@ -132,7 +132,7 @@ public class DataFrame {
     }
 
     //setter de celda si el label de la columna es un índice numérico y el de la fila un string
-    public void setCelda(String row, int column, T value){
+    public void setCelda(String row, int column, Object value){
         //Verifico que el índice sea válido
         if(column < 0 || column >= this.numCol){
             throw new IndexOutOfBoundsException("Índice de columna inválido:" + column);
@@ -147,7 +147,7 @@ public class DataFrame {
     }
 
     //setter de celda si ambos labels son strings
-    public void setCelda(String row, int column, T value){
+    public void setCelda(String row, int column, Object value){
         int colIndex = colLabelToIndex(column);
         int rowIndex = rowLabelToIndex(row);
         //Verifico que el tipo del objeto sea válido para esta columna
@@ -157,7 +157,15 @@ public class DataFrame {
         //Busco la celda y le cambio el valor
         this.columns.get(colIndex).getList().get(rowIndex).setValue(value);
     }
-    
-}
+
+
+    // métodos que cree para que funcione el expo 
+    public List<Column<Celda<?>>> getColumns() {
+        return columns;
+    }
+    public int getNumRow() {
+    return numRow;
+    }
 
 }
+
