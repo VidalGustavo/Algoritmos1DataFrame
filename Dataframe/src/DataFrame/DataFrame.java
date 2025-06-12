@@ -5,6 +5,7 @@ import java.util.List;
 
 import Column.Column;
 import Celda.Celda;
+import Archivos.LectorCSV;
 
 public class DataFrame {
     //private ArrayList <Rows> rows ;
@@ -211,12 +212,14 @@ public class DataFrame {
     }
 
     public static DataFrame leerCSV(String ruta){
-        DataFrame dataframe = LectorCSV.leerCSV(ruta);
+        LectorCSV lector = new LectorCSV();
+        DataFrame dataframe = lector.leer(ruta);
         return dataframe;
     }
 
     public static DataFrame leerCSV(String ruta, String separador){
-        DataFrame dataframe = LectorCSV.leerCSV(ruta, separador);
+        LectorCSV lector = new LectorCSV();
+        DataFrame dataframe = lector.leer(ruta, separador);
         return dataframe;
     }
 

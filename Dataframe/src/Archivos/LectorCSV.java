@@ -1,7 +1,9 @@
-package DataFrame;
+package Archivos;
 
 import Celda.Celda;
 import Column.Column;
+import DataFrame.DataFrame;
+import DataFrame.TipoDatos;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -9,7 +11,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LectorCSV {
+public class LectorCSV implements LectorArchivos {
+
+    public LectorCSV(){
+
+    }
+
     protected static List<String> leerLineas(String nombreArchivo){
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(nombreArchivo))) {
             String linea;
@@ -106,7 +113,8 @@ public class LectorCSV {
         return dataframe;
     }
 
-    public static DataFrame leerCSV(String rutaArchivo){
+    @Override
+    public DataFrame leer(String rutaArchivo){
         List<String> lineasLeidas = leerLineas(rutaArchivo);
         String[][] celdas;
         try {
@@ -118,7 +126,8 @@ public class LectorCSV {
         }
     }
 
-    public static DataFrame leerCSV(String rutaArchivo, String separador){
+    @Override
+    public DataFrame leer(String rutaArchivo, String separador){
         List<String> lineasLeidas = leerLineas(rutaArchivo);
         String[][] celdas;
         try {
