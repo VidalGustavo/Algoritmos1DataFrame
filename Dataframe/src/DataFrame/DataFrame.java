@@ -210,5 +210,14 @@ public class DataFrame {
         return copia;
     }
 
+    public DataFrame leerCSV(String ruta){
+        DataFrame dataframe = LectorCSV.leerCSV(ruta);
+        return dataframe;
+    }
+
+    public DataFrame leerCSV(String ruta, String separador){
+        DataFrame dataframe = LectorCSV.leerCSV(ruta, separador);
+        return dataframe;
+    }
 }
 
