@@ -1,14 +1,18 @@
-package celda;
+package Celda;
 
-public abstract class Celda<T> {
+import DataFrame.TipoDatos;
+
+public class Celda<T> {
     protected T value;
     protected Boolean isNA; // Representa si la celda está vacía
     private static final String NA = "#N/A"; // Valor a mostrar en celda vacía
+    private TipoDatos tipoDato;
 
     // Constructor
-    public Celda(T value) {
+    public Celda(T value, TipoDatos tipoDato) {
         this.value = value;
-        this.isNA = (value == null);
+        isNA = (value == null);
+        this.tipoDato = tipoDato;
     }
 
     // a) Ver el valor
@@ -46,5 +50,9 @@ public abstract class Celda<T> {
     public void switchNA(){
         this.isNA = !this.isNA;
         if (this.isNA) this.value = null;
+    }
+
+    public TipoDatos getTipoDato(){
+        return tipoDato;
     }
 }
