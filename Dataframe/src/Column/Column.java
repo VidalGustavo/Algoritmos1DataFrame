@@ -64,10 +64,9 @@ public class Column<T> {
         return list;
     }
 
-    public String getTipoCelda() {
+    public TipoDatos getTipoCelda() {
         // TODO: revisar si corresponde inmutabilidad
-        String tipo = new String(tipoCelda.name());
-        return tipo;
+        return tipoCelda;
     }
 
     public void setName(String name) {
@@ -85,6 +84,22 @@ public class Column<T> {
         } else {
             return false; // Tipo no valido
         }
-    };
+    }
+
+    public void addCelda(Celda<T> celda){
+        list.add(celda);
+    }
+
+    public Column<T> copy(){
+        ArrayList<Celda<T>> celdasCopia = new ArrayList<>();
+        for(Celda<T> celdaOriginal : list){
+            Celda<T> celdaCopia = celdaOriginal.copy();
+            celdasCopia.add(celdaCopia);
+        }
+
+        Column<T> copia = new Column(name, tipoCelda, celdasCopia);
+
+        return copia;
+    }
 
 }
