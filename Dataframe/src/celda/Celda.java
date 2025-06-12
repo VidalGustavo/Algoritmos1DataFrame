@@ -55,4 +55,13 @@ public class Celda<T> {
     public TipoDatos getTipoDato(){
         return tipoDato;
     }
+
+    /*
+    Copia profunda
+    Asume que T es inmutable (String, booleano o número)
+     */
+    public Celda<T> copy(){
+        Celda copia = new Celda(value, tipoDato);
+        return copia;
+    }
 }
