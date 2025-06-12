@@ -46,6 +46,7 @@ public class DataFrame {
 
     public void addColumn(Column column){
         columns.add(column);
+        numCol++;
     }
 
     //getter de una columna si se le ingresa el número de columna
@@ -180,6 +181,33 @@ public class DataFrame {
 
     public int getNumRow() {
         return numRow;
+    }
+
+    //Métodos de copias:
+    //Copia superficial:
+    public DataFrame shallowCopy(){
+        DataFrame copia = new DataFrame();
+        copia.columns = columns;
+        copia.numRow = numRow;
+        copia.numCol = numCol;
+
+        return copia;
+    }
+
+    //Copia profunda:
+    public DataFrame copy(){
+        DataFrame copia = new DataFrame();
+
+        //Recorro el dataframe por columnas:
+        for(int i = 0; i < numCol; i++){
+            Column colOriginal = getColumn(i);
+
+            Column colCopia = colOriginal.copy();
+            copia.addColumn(colCopia);
+        }
+
+        copia.numRow = numRow;
+        return copia;
     }
 
 }
