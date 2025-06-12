@@ -329,9 +329,49 @@ public class DataFrame {
         System.out.println("[" + numRow + " x " + numCol +"]");
         
     }
+    public void getCol(Column <Celda<?>> name) {
+        // Verifica si la columna existe
+        if (!columns.contains(name)) {
+            throw new IllegalArgumentException("Columna no encontrada: " + name.getName());
+        }
+        // Imprime el nombre de la columna
+        System.out.println("Columna: " + name.getName());
+        // Imprime los valores de la columna
+        for (Celda<?> celda : name.getList()) {
+            System.out.print(celda.getValue() + "\t");
+        }
+        System.out.println(); // Salto de línea al final
+        }
+    
+    public void getRow (int rowIndex) {
+        // Verifica si el índice de fila es válido
+        if (rowIndex < 0 || rowIndex >= numRow) {
+            throw new IndexOutOfBoundsException("Índice de fila inválido: " + rowIndex);
+        }
+        // Imprime los valores de la fila
+        for (Column<Celda<?>> columna : columns) {
+            Celda<?> celda = columna.getList().get(rowIndex);
+            System.out.print(celda.getValue() + "\t");
+        }
+        System.out.println(); // Salto de línea al final    
+    }
 
+    public void columns() {
+        // Imprime los nombres de las columnas
+        for (Column<Celda<?>> columna : columns) {
+            System.out.print(columna.getName() + "\t");
+        }
+        System.out.println(); // Salto de línea al final
+    }
 
-
+    public void numCol(){
+        // Imprime el número de columnas
+        System.out.println("Número de columnas: " + numCol);
+    }
+    public void numRow(){
+        // Imprime el número de filas
+        System.out.println("Número de filas: " + numRow);
+    }
 
 
 }
