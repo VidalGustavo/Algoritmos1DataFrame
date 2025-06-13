@@ -59,7 +59,7 @@ public class LectorCSV implements LectorArchivos {
 
     //Transforma cada celda en una Celda de su tipo de dato
     //Pasa de trabajar en filas a trabajar en columnas
-    protected static DataFrame crearDataframe(String[][] celdas){
+    protected static DataFrame crearDataframe(String[][] celdas, boolean encabezado){
         int cantColumnas = celdas[0].length;
         int cantFilas = celdas.length;
 
@@ -103,25 +103,37 @@ public class LectorCSV implements LectorArchivos {
             for (int i = j; i < listaCeldas.size(); i += cantColumnas){
                 listaCeldasAux.add(listaCeldas.get(i));
             }
-            String nombreCol = String.valueOf(listaCeldasAux.get(0).getValue());
+
+            String nombreCol;
             TipoDatos tipoCol = listaCeldasAux.get(1).getTipoDato();
+            if(encabezado){
+                nombreCol = String.valueOf(listaCeldasAux.get(0).getValue());
+                listaCeldasAux.remove(0);
+            }else{
+                nombreCol = String.valueOf(j);
+            }
 
             Column<Celda> columnaAux = new Column<Celda>(nombreCol, tipoCol, listaCeldasAux);
             dataframe.addColumn(columnaAux);
         }
 
-        dataframe.setNumRow(cantFilas);
+        //Agrego la cantidad de filas:
+        if(encabezado){
+            dataframe.setNumRow(cantFilas-1);
+        }else{
+            dataframe.setNumRow(cantFilas);
+        }
 
         return dataframe;
     }
 
     @Override
-    public DataFrame leer(String rutaArchivo){
+    public DataFrame leer(String rutaArchivo, String separador, boolean encabezado){
         List<String> lineasLeidas = leerLineas(rutaArchivo);
         String[][] celdas;
         try {
-            celdas = parsearLineas(lineasLeidas, ",");
-            return crearDataframe(celdas);
+            celdas = parsearLineas(lineasLeidas, separador);
+            return crearDataframe(celdas, encabezado);
         } catch (RuntimeException e) {
             System.out.println(e);
             return null;
@@ -129,15 +141,7 @@ public class LectorCSV implements LectorArchivos {
     }
 
     @Override
-    public DataFrame leer(String rutaArchivo, String separador){
-        List<String> lineasLeidas = leerLineas(rutaArchivo);
-        String[][] celdas;
-        try {
-            celdas = parsearLineas(lineasLeidas, separador);
-            return crearDataframe(celdas);
-        } catch (RuntimeException e) {
-            System.out.println(e);
-            return null;
-        }
+    public DataFrame leer(String rutaArchivo, boolean encabezado){
+        return leer(rutaArchivo, ",", encabezado);
     }
 }
