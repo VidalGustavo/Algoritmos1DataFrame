@@ -286,110 +286,13 @@ public class DataFrame<T> {
     }
 
     // metodos que estoy creando porque faltaban
-    public void head(int cant) {
-        if (cant < 0 || cant > this.numRow) {
-            throw new IllegalArgumentException("Cantidad inválida");
-        }
 
-        // 1. Imprimir encabezados (nombres de columnas) si existen
-        for (Column<Celda<?>> columna : columns) {
-            System.out.print(columna.getName() + "\t"); // Usa tabulación o formato fijo
-        }
-        System.out.println(); // Salto de línea después de los encabezados
 
-        // 2. Imprimir las filas solicitadas
-        for (int i = 0; i < cant; i++) {
-            for (Column<Celda<?>> columna : columns) {
-                Celda<?> celda = columna.getList().get(i);
-                System.out.print(celda.getValue() + "\t"); // Asume que hay un método getValor()
-            }
-            System.out.println(); // Salto de línea después de cada fila
-            }
     
 
-        if (cant < 0 || cant > this.numRow) {
-            throw new IllegalArgumentException("Cantidad inválida");
-        }
-
-        // Encabezados
-        for (Column<Celda<?>> columna : columns) {
-            System.out.print(columna.getName() + "\t"); // Usa tabulación o formato fijo
-        }
-        System.out.println(); // Salto de línea 
-
-        // Filas
-        for (int i = 0; i < cant; i++) {
-            for (Column<Celda<?>> columna : columns) {
-                Celda<?> celda = columna.getList().get(i);
-                System.out.print(celda.getValue() + "\t"); // Asume que hay un método getValor()
-            }
-            System.out.println(); // Salto de línea después de cada fila
-        }
     
-    }
 
-    public void head() {
-        // Sobrecarga. Por defecto mostramos las primeras cinco filas
-        // encabezados
-        for (Column<Celda<?>> columna : columns) {
-            System.out.print(columna.getName() + "\t"); // Usa tabulación o formato fijo
-        }
-        System.out.println(); // Salto de línea después de los encabezados
-
-        // 2. Imprimir las filas solicitadas
-        for (int i = 0; i < 5; i++) {
-            for (Column<Celda<?>> columna : columns) {
-                Celda<?> celda = columna.getList().get(i);
-                System.out.print(celda.getValue() + "\t"); 
-            }
-            System.out.println(); // Salto de línea después de cada fila
-        }
-    }
-
-    public void tail(int cant) {
-        if (cant < 0 || cant > this.numRow) {
-            throw new IllegalArgumentException("Cantidad inválida");
-        }
-
-        // Calcular el índice de inicio (últimas 'cant' filas)
-        int startRow = this.numRow - cant;
-
-        // Imprimo encabezados (igual que en head())
-        for (Column<Celda<?>> columna : columns) {
-            System.out.print(columna.getName() + "\t");
-        }
-        System.out.println();
-
-        // itero desde startRow hasta el final
-        for (int i = startRow; i < this.numRow; i++) {
-            for (Column<Celda<?>> columna : columns) {
-                Celda<?> celda = columna.getList().get(i);
-                System.out.print(celda.getValue() + "\t");
-            }
-            System.out.println();
-        }
-    }
-
-    public void tail() {
     
-        // Calculao del índice de inicio (últimas 'cant' filas)
-        int startRow = (this.numRow -5 >= 0) ? this.numRow -5 : 0; // Por defecto, mostrar las últimas 5 filas
-
-        // encabezados
-        for (Column<Celda<?>> columna : columns) {
-            System.out.print(columna.getName() + "\t");
-        }
-        System.out.println();
-
-        // filas
-        for (int i = startRow; i < this.numRow; i++) {
-            for (Column<Celda<?>> columna : columns) {
-                Celda<?> celda = columna.getList().get(i);
-                System.out.print(celda.getValue() + "\t");
-            }
-            System.out.println(); // salto de línea
-        }
-    }
         
     public void shape(){
         System.out.println("[" + numRow + " x " + numCol +"]");
@@ -436,6 +339,40 @@ public class DataFrame<T> {
         
         colLabel = newColLabel;
     }
+
+    public void renameCol (String oldName, String newName) {
+        if (!colLabel.containsKey(oldName)) {
+            throw new IllegalArgumentException("Columna no encontrada: " + oldName);
+        }
+        
+        int index = colLabel.get(oldName);
+        columns.get(index).setName(newName);
+        if (colLabel.containsKey(newName)) {
+            throw new IllegalArgumentException("El nuevo nombre de columna ya existe: " + newName);
+        }
+        colLabel.remove(oldName);
+        colLabel.put(newName, index);
+    }
+
+
+    public void renameCol (int index, String newName) {
+        if (index < 0 || index >= numCol) {
+            throw new IndexOutOfBoundsException("Índice de columna inválido: " + index);
+        }
+        
+        String oldName = columns.get(index).getName();
+        columns.get(index).setName(newName);
+        if (colLabel.containsKey(newName)) {
+            throw new IllegalArgumentException("El nuevo nombre de columna ya existe: " + newName);
+        
+        }
+        colLabel.remove(oldName);
+        colLabel.put(newName, index);
+    }
+
+
+
+
     
     public void renameRows(String[] newNames) {
         if (newNames.length != numRow) {
@@ -451,7 +388,7 @@ public class DataFrame<T> {
         
         rowLabel = newRowLabel;
     }
-}
+
     public void showRow(int rowIndex) {
         // Verifica si el índice de fila es válido
         if (rowIndex < 0 || rowIndex >= numRow) {
@@ -482,5 +419,24 @@ public class DataFrame<T> {
         // Imprime el número de filas
         System.out.println("Número de filas: " + numRow);
     }
+
+    public void addColumnFromList(List<Celda<?>> list, String name) {
+        if (list.isEmpty()) {
+            throw new IllegalArgumentException("La lista no puede estar vacía");
+        }
+        
+        // Verifica que todas las celdas tengan el mismo tipo de dato
+        TipoDatos tipoDato = list.get(0).getTipoDato();
+        for (Celda<?> celda : list) {
+            if (celda.getTipoDato() != tipoDato) {
+                throw new IllegalArgumentException("Todas las celdas deben tener el mismo tipo de dato");
+            }
+        }
+
+        Column<Celda<?>> nuevaColumna = new Column<ArrayList<Celda<?>>>(name, tipoDato, new ArrayList<Celda<?>>(list));
+        addColumn(nuevaColumna);
+    }
+
 }
+
 

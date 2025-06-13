@@ -3,6 +3,9 @@ package DataFrame;
 import Column.Column;
 
 import javax.xml.crypto.Data;
+
+import Celda.Celda;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -190,4 +193,96 @@ public class Seleccionador {
             selectPorLabels(dataFrame, rowIndexs, colIndexs);
         }
     }
+
+
+
+
+    public void head(DataFrame dataframe, int cant) {
+        if (cant < 0 || cant > dataframe.getNumRow()) {
+            throw new IllegalArgumentException("Cantidad inválida");
+        }
+
+        // 1. Imprimir encabezados (nombres de columnas) si existen
+        for (Column<Celda<?>> columna : dataframe.getColumns()) {
+            System.out.print(columna.getName() + "\t"); // Usa tabulación o formato fijo
+        }
+        System.out.println(); // Salto de línea después de los encabezados
+
+        // 2. Imprimir las filas solicitadas
+        for (int i = 0; i < cant; i++) {
+            for (Column<Celda<?>> columna : dataframe.getColumns()) {
+                Celda<?> celda = columna.getList().get(i);
+                System.out.print(celda.getValue() + "\t"); // Asume que hay un método getValor()
+            }
+            System.out.println(); // Salto de línea después de cada fila
+        }
+    }
+
+
+    public void head(DataFrame dataframe) {
+        // Sobrecarga. Por defecto mostramos las primeras cinco filas
+        // encabezados
+        for (Column<Celda<?>> columna : dataframe.getColumns()) {
+            System.out.print(columna.getName() + "\t"); // Usa tabulación o formato fijo
+        }
+        System.out.println(); // Salto de línea después de los encabezados
+
+        // 2. Imprimir las filas solicitadas
+        for (int i = 0; i < 5; i++) {
+            for (Column<Celda<?>> columna : dataframe.getColumns()) {
+                Celda<?> celda = columna.getList().get(i);
+                System.out.print(celda.getValue() + "\t"); 
+            }
+            System.out.println(); // Salto de línea después de cada fila
+        }
+    }
+
+    public void tail(DataFrame dataFrame, int cant) {
+        if (cant < 0 || cant > dataFrame.getNumRow()) {
+            throw new IllegalArgumentException("Cantidad inválida");
+        }
+
+        // Calcular el índice de inicio (últimas 'cant' filas)
+        int startRow = dataFrame.getNumRow() - cant;
+
+        // Imprimo encabezados (igual que en head())
+        for (Column<Celda<?>> columna : dataFrame.getColumns()) {
+            System.out.print(columna.getName() + "\t");
+        }
+        System.out.println();
+
+        // itero desde startRow hasta el final
+        for (int i = startRow; i < dataFrame.getNumRow(); i++) {
+            for (Column<Celda<?>> columna : dataFrame.getColumns()) {
+                Celda<?> celda = columna.getList().get(i);
+                System.out.print(celda.getValue() + "\t");
+            }
+            System.out.println();
+        }
+    }
+    public void tail(DataFrame dataFrame) {
+
+        // Calcular el índice de inicio (últimas 'cant' filas)
+        int startRow = (dataFrame.getNumRow() - 5 >= 0) ? dataFrame.getNumRow() - 5 : 0; // Por defecto, mostrar las últimas 5 filas
+
+        // encabezados
+        for (Column<Celda<?>> columna : dataFrame.getColumns()) {
+            System.out.print(columna.getName() + "\t");
+        }
+        System.out.println();
+
+        // filas
+        for (int i = startRow; i < dataFrame.getNumRow(); i++) {
+            for (Column<Celda<?>> columna : dataFrame.getColumns()) {
+                Celda<?> celda = columna.getList().get(i);
+                System.out.print(celda.getValue() + "\t");
+            }
+            System.out.println(); // salto de línea
+        }
+    }
+
+
+
+
+
 }
