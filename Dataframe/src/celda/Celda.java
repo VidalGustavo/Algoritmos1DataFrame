@@ -2,7 +2,7 @@ package Celda;
 
 import DataFrame.TipoDatos;
 
-public class Celda<T> {
+public class Celda<T> implements Comparable<Celda<T>> {
     protected T value;
     protected Boolean isNA; // Representa si la celda está vacía
     private static final String NA = "#N/A"; // Valor a mostrar en celda vacía
@@ -64,4 +64,31 @@ public class Celda<T> {
         Celda copia = new Celda(value, tipoDato);
         return copia;
     }
+
+    @Override
+    public int compareTo(Celda<T> o) {
+        // Fuera de las implementaciones de Celda vacia y tipoDato. Delega las restricciones de compareTo al tipo de dato.
+        if (this.tipoDato != o.tipoDato) {throw new ClassCastException("No se puede comparar celdas de diferentes tipos de datos.");}
+        if (this.isNA && o.isNA) {
+            return 0; // Ambos son NA, se consideran iguales
+        } else if (this.isNA) {
+            return -1; // NA es menor que cualquier otro valor
+        } else if (o.isNA) {
+            return 1; // Cualquier otro valor es mayor que NA
+        }
+        
+        if (this.value instanceof Comparable) {
+            if (this.tipoDato == TipoDatos.NUMBER) {
+                // Number no implementa Comparable -.-"
+                Number este = (Number) this.value;
+                Number otro = (Number) o.value;
+                return ((Double) (este.doubleValue())).compareTo((Double) otro.doubleValue());
+            }
+            return ((Comparable) this.value).compareTo(o.value);
+        } else {
+            throw new ClassCastException("El valor de la celda no es comparable. Los tipos de datos deben implementar Comparable.");
+        }
+
+    }
+    
 }

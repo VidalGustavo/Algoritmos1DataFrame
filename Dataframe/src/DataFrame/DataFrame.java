@@ -1,5 +1,13 @@
 package DataFrame;
 
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.IntStream;
+import java.util.Map;
+import java.util.Set;
+
 import Archivos.LectorCSV;
 import Celda.Celda;
 import Column.Column;
@@ -481,4 +489,75 @@ public class DataFrame {
 
         rowLabel = newRowLabel;
     }
+ 
+
+    /////////////////////////////////////////////
+    //              Ordenamiento              //
+    ///////////////////////////////////////////
+    public DataFrame orderBy(int columnIndex, boolean ascending) {
+        // La idea es crear una lista de indices (enteros de 0 a Column.size-1) e ir moviendola con el mismo proceso que el de ordenamiento.
+        // Asi luego de tener la columna deseada ordenada, se puede aplicar el orden a las otras columnas.
+        if (columnIndex < 0 || columnIndex >= numCol) {
+            throw new IndexOutOfBoundsException("Índice de columna inválido: " + columnIndex);
+        }
+        // Por simpleza trabajo con una copia de la columna referida, luego la ordeno junto al resto de las columnas.
+        Column referedColumn = getColumn(columnIndex).copy();
+        ArrayList<Integer> indices = new ArrayList<>();
+        indices.addAll(IntStream.range(0, referedColumn.getSize()).boxed().toList()); // llena array con int de 0 a Column.size-1
+        // Ordenar en si.
+        //TODO: optimizar el ordenamiento.
+        int length = referedColumn.getSize();
+        for (int i = 0; i < length - 1; i++) {
+            int minIndex = i;
+            Celda minCell = (Celda) referedColumn.getList().get(i);
+            for (int j = i + 1; j < length; j++) {
+                Celda currentCell = (Celda) referedColumn.getList().get(j);
+                
+                if (currentCell.compareTo(minCell) < 0) {
+                    minIndex = j;
+                    minCell = currentCell;
+                }
+            }
+            Celda tempCell = (Celda) referedColumn.getList().get(minIndex);
+            referedColumn.getList().set(minIndex, referedColumn.getList().get(i));
+            referedColumn.getList().set(i, tempCell);
+            int tempIndex = indices.get(minIndex);
+            indices.set(minIndex, indices.get(i));
+            indices.set(i, tempIndex);
+        }
+
+        if (!ascending) {
+            // Invertir el orden.
+            for (int i = 0; i < (int) indices.size() / 2; i++) {
+                int temp = indices.get(i);
+                int mirroredPosition = indices.size() - 1 - i;
+                indices.set(i, indices.get(mirroredPosition));
+                indices.set(mirroredPosition, temp);
+            }
+        }
+
+        // Crear un nuevo DataFrame con las columnas ordenadas.
+        DataFrame orderedDataFrame = new DataFrame();
+        orderedDataFrame.numRow = this.numRow;
+        orderedDataFrame.numCol = this.numCol;
+        for (int i = 0; i < numCol; i++) {
+            Column<Celda<?>> tempColumna = this.getColumn(i).copy();
+
+            ArrayList<Celda<?>> orderedList = new ArrayList<>();
+            for (int index : indices) {
+                // Agregar las celdas en el orden especificado por indices
+                orderedList.add(tempColumna.getList().get(index));
+            }
+            Column orderedColumn = new Column(tempColumna.getName(), tempColumna.getTipoCelda(), orderedList);
+            orderedDataFrame.addColumn(orderedColumn);
+        }
+        
+        return orderedDataFrame;    
+    }
+    //TODO: Descomentar cuando se implemente el método colLabelToIndex
+    // public DataFrame orderBy(String columnName, boolean ascending) {
+    //     int colIndex = colLabelToIndex(columnName);
+    //     return orderBy(colIndex, ascending);
+    // }
+
 }
