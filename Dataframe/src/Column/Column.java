@@ -50,7 +50,6 @@ public class Column<T> {
 
     // Getters y Setters
     public String getName() {
-        // TODO: revisar si corresponde inmutabilidad
         String name = new String(this.name);
         return name;
     }
@@ -60,12 +59,10 @@ public class Column<T> {
     }
 
     public ArrayList<Celda<T>> getList() {
-        // TODO: revisar si corresponde inmutabilidad
         return list;
     }
 
     public TipoDatos getTipoCelda() {
-        // TODO: revisar si corresponde inmutabilidad
         return tipoCelda;
     }
 
