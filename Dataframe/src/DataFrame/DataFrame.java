@@ -57,14 +57,41 @@ public class DataFrame {
         numRow = columns.isEmpty() ? 0 : columns.get(0).getSize();
     }
 
-    // public DataFrame(ArrayList<ArrayList<T>>){
+    public DataFrame(ArrayList<?> linealArray, Boolean hasHeader){
+        if (linealArray.isEmpty()) {
+            throw new IllegalArgumentException("El array no puede estar vacío");
+        }
+        // Si no tiene header, le agrega un header por defecto
+        ArrayList<Celda<?>> arrayCelda = new ArrayList<>();
+        if (!hasHeader) {
+            Celda celdaHeader = new Celda("Nueva Columna " + this.numCol+1, TipoDatos.STRING);
+            arrayCelda.add(celdaHeader);
+        } 
+        for (Object value : linealArray) {
+            TipoDatos tipoDato;
+            if (value instanceof String) {
+                tipoDato = TipoDatos.STRING;
+            } else if (value instanceof Number) {
+                tipoDato = TipoDatos.NUMBER;
+            } else if (value instanceof Boolean) {
+                tipoDato = TipoDatos.BOOLEAN;
+            } else {
+                throw new IllegalArgumentException("El valor " + value.toString() +" tiene Tipo de dato no soportado: " + value.getClass().getSimpleName());
+            }
+            Celda<?> celda = new Celda(value, tipoDato);
+            arrayCelda.add(celda);
+        }
+        
+        this.columns = new ArrayList<Column<Celda<?>>>();
+        this.colLabel = new HashMap<>();
+        this.rowLabel = new HashMap<>();
 
-    //         }
+        Column nuevaColumna = new Column(arrayCelda);
+        this.addColumn(nuevaColumna);
+        this.numRow = arrayCelda.size() ; 
+    }
 
 
-    // public DataFrame (String) {
-
-    // }
 
     public void addColumn(Column column) {
         columns.add(column);
