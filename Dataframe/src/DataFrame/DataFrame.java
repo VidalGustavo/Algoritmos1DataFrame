@@ -11,6 +11,7 @@ import java.util.Set;
 import Archivos.LectorCSV;
 import Celda.Celda;
 import Column.Column;
+import Filter.FilterPipeline;
 
 import java.util.*;
 
@@ -375,7 +376,14 @@ public class DataFrame {
 
     public void shape() {
         System.out.println("[" + numRow + " x " + numCol + "]");
+    }
 
+    /**
+     * Creates a new filter pipeline for this DataFrame
+     * @return A FilterPipeline object that can be used to build and apply filters
+     */
+    public FilterPipeline filter() {
+        return new FilterPipeline();
     }
 
     public void showRow(int rowIndex) {
