@@ -80,20 +80,6 @@ public class DataFrame<T> {
         if (rowLabel.containsKey(rowLabelStr)) {
             return rowLabel.get(rowLabelStr);
         }
-        
-        if (columns.isEmpty()) {
-            throw new IllegalStateException("DataFrame is empty");
-        }
-        
-        Column firstColumn = columns.get(0);
-        for (int i = 0; i < firstColumn.getSize(); i++) {
-            String value = firstColumn.getList().get(i).getValue().toString();
-            if (value.equals(rowLabelStr)) {
-                // Add to map for future lookups
-                rowLabel.put(rowLabelStr, i);
-                return i;
-            }
-        }
         throw new IllegalArgumentException("Row label not found: " + rowLabelStr);
     }
 
