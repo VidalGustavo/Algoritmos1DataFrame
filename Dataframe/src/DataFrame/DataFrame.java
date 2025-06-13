@@ -451,7 +451,7 @@ public class DataFrame<T> {
         
         rowLabel = newRowLabel;
     }
-}
+    
     public void showRow(int rowIndex) {
         // Verifica si el índice de fila es válido
         if (rowIndex < 0 || rowIndex >= numRow) {
