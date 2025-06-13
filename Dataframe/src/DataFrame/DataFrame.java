@@ -673,4 +673,63 @@ public class DataFrame {
     //     return orderBy(colIndex, ascending);
     // }
 
+
+//###############################################
+
+    public void addColumnFromList(List<Celda<?>> list, String name) {
+        if (list.isEmpty()) {
+            throw new IllegalArgumentException("La lista no puede estar vacía");
+        }
+        
+        // Verifica que todas las celdas tengan el mismo tipo de dato
+        TipoDatos tipoDato = list.get(0).getTipoDato();
+        for (Celda<?> celda : list) {
+            if (celda.getTipoDato() != tipoDato) {
+                throw new IllegalArgumentException("Todas las celdas deben tener el mismo tipo de dato");
+            }
+        }
+
+        Column<Celda<?>> nuevaColumna = new Column<ArrayList<Celda<?>>>(name, tipoDato, new ArrayList<Celda<?>>(list));
+        addColumn(nuevaColumna);
+    }
+
+
+
+
+
+    public void renameCol (String oldName, String newName) {
+        if (!colLabel.containsKey(oldName)) {
+            throw new IllegalArgumentException("Columna no encontrada: " + oldName);
+        }
+        
+        int index = colLabel.get(oldName);
+        columns.get(index).setName(newName);
+        if (colLabel.containsKey(newName)) {
+            throw new IllegalArgumentException("El nuevo nombre de columna ya existe: " + newName);
+        }
+        colLabel.remove(oldName);
+        colLabel.put(newName, index);
+    }
+
+
+    public void renameCol (int index, String newName) {
+        if (index < 0 || index >= numCol) {
+            throw new IndexOutOfBoundsException("Índice de columna inválido: " + index);
+        }
+        
+        String oldName = columns.get(index).getName();
+        columns.get(index).setName(newName);
+        if (colLabel.containsKey(newName)) {
+            throw new IllegalArgumentException("El nuevo nombre de columna ya existe: " + newName);
+        
+        }
+        colLabel.remove(oldName);
+        colLabel.put(newName, index);
+    }
+
+
+
+
+
+
 }
