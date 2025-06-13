@@ -74,45 +74,28 @@ public class DataFrame {
             throw new IndexOutOfBoundsException("Índice de fila inválido:" + row);
         }
         //Busco la columna y luego la celda
-        Column columna = columns.get(column);
-        Celda celda = (Celda) columna.getList().get(row);
+        Column<?> columna = columns.get(column);
+        Celda<?> celda = columna.getList().get(row);
         return celda;
     }
 
     //getter de celdas si se le ingresa la fila como int y la columna como string
     public Celda getCelda(int row, String column){
-        //Verifico que el índice sea válido
-        if(row < 0 || row >= this.numRow){
-            throw new IndexOutOfBoundsException("Índice de fila inválido:" + row);
-        }
         int colIndex = colLabelToIndex(column);
-        //Busco la columna y luego la celda
-        Column columna = columns.get(colIndex);
-        Celda celda = (Celda) columna.getList().get(row);
-        return celda;
+        return getCelda(row, colIndex);
     }
 
     //getter de celdas si se le ingresa la fila como string y la columna como string
     public Celda getCelda(String row, int column){
-        //Verifico que el índice sea válido
-        if(column < 0 || column >= this.numCol){
-            throw new IndexOutOfBoundsException("Índice de columna inválido:" + column);
-        }
         int rowIndex = rowLabelToIndex(row);
-        //Busco la columna y luego la celda
-        Column columna = columns.get(column);
-        Celda celda = (Celda) columna.getList().get(rowIndex);
-        return celda;
+        return getCelda(rowIndex, column);
     }
 
     //getter de celdas si se le ingresan ambos parámetros como strings
     public Celda getCelda(String row, String column){
-        int colIndex = colLabelToIndex(column);
         int rowIndex = rowLabelToIndex(row);
-        //Busco la columna y luego la celda
-        Column columna = columns.get(colIndex);
-        Celda celda = (Celda) columna.getList().get(rowIndex);
-        return celda;
+        int colIndex = colLabelToIndex(column);
+        return getCelda(rowIndex, colIndex);
     }
 
     //setter de celda si ambos labels son índices numéricos
