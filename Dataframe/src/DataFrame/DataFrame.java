@@ -52,6 +52,7 @@ public class DataFrame {
 
     //getter de una columna si se le ingresa el número de columna
     public Column getColumn(int column){
+        //Verifico que el índice sean válidos
         if(column < 0 || column >= numCol){
             throw new IndexOutOfBoundsException("Índice de columna inválido: " + column);
         }
@@ -64,13 +65,36 @@ public class DataFrame {
         return columns.get(colIndex);
     }
 
+    //getter de una fila si el índice es numérico:
+    public ArrayList<Celda<?>> getRow(int row){
+        //Verifico que el índice sean válidos
+        if(row < 0 || row >= numRow){
+            throw new IndexOutOfBoundsException("Índice de fila inválido:" + row);
+        }
+
+        ArrayList<Celda<?>> fila = new ArrayList<>();
+        for(int i = 0; i < numCol; i++){
+            Celda<?> celda = getCelda(row, i);
+            fila.add(celda);
+        }
+
+        return fila;
+    }
+
+    //getter de una fila si el índice es un string:
+    public ArrayList<Celda<?>> getRow(String row){
+        int rowIndex = rowLabelToIndex(row);
+        return getRow(rowIndex);
+    }
+
+
     //getter de celdas si se le ingresan ambos parámetros como ints
     public Celda getCelda(int row, int column){
         //Verifico que los índices sean válidos
-        if(column < 0 || column >= this.numCol){
+        if(column < 0 || column >= numCol){
             throw new IndexOutOfBoundsException("Índice de columna inválido:" + column);
         }
-        if(row < 0 || row >= this.numRow){
+        if(row < 0 || row >= numRow){
             throw new IndexOutOfBoundsException("Índice de fila inválido:" + row);
         }
         //Busco la columna y luego la celda
@@ -325,7 +349,7 @@ public class DataFrame {
         
     }
 
-    public void getCol(Column <Celda<?>> name) {
+    public void showColumn(Column <Celda<?>> name) {
         // Verifica si la columna existe
         if (!columns.contains(name)) {
             throw new IllegalArgumentException("Columna no encontrada: " + name.getName());
@@ -339,7 +363,7 @@ public class DataFrame {
         System.out.println(); // Salto de línea al final
     }
     
-    public void getRow (int rowIndex) {
+    public void showRow(int rowIndex) {
         // Verifica si el índice de fila es válido
         if (rowIndex < 0 || rowIndex >= numRow) {
             throw new IndexOutOfBoundsException("Índice de fila inválido: " + rowIndex);
