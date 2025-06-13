@@ -483,7 +483,6 @@ public class DataFrame<T> {
         System.out.println("Número de filas: " + numRow);
     }
     
-
     public void deleteRow(int rowIndex) {
         // Verifico que el índice sea válido
         if (rowIndex < 0 || rowIndex >= this.numRow) {
@@ -497,8 +496,21 @@ public class DataFrame<T> {
         
         // Actualizo el contador de filas
         this.numRow--;
+        
+        // Actualizo los índices de las filas en el mapa rowLabel
+        Map<String, Integer> newRowLabel = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : rowLabel.entrySet()) {
+            int idx = entry.getValue();
+            if (idx > rowIndex) {
+                newRowLabel.put(entry.getKey(), idx - 1);
+            } else if (idx < rowIndex) {
+                newRowLabel.put(entry.getKey(), idx);
+            }
+            // Si idx == rowIndex, no lo incluimos en el nuevo mapa
+        }
+        rowLabel = newRowLabel;
+    }
     
-
     public void deleteRow(String rowLabel) {
         // Convierto la etiqueta a índice
         int rowIndex = rowLabelToIndex(rowLabel);
@@ -518,6 +530,19 @@ public class DataFrame<T> {
         
         // Actualizo el contador de columnas
         this.numCol--;
+        
+        // Actualizo los índices de las columnas en el mapa colLabel
+        Map<String, Integer> newColLabel = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : colLabel.entrySet()) {
+            int idx = entry.getValue();
+            if (idx > colIndex) {
+                newColLabel.put(entry.getKey(), idx - 1);
+            } else if (idx < colIndex) {
+                newColLabel.put(entry.getKey(), idx);
+            }
+            // Si idx == colIndex, no lo incluimos en el nuevo mapa
+        }
+        colLabel = newColLabel;
     }
     
     public void deleteColumn(String colLabel) {
