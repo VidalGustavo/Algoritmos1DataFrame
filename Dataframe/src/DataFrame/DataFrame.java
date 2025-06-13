@@ -9,6 +9,7 @@ import java.util.Set;
 
 import Column.Column;
 import Celda.Celda;
+import Archivos.LectorCSV;
 
 public class DataFrame<T> {
     //private ArrayList <Rows> rows ;
@@ -35,7 +36,7 @@ public class DataFrame<T> {
         rowLabel = new HashMap<>();
     }
 
-    public DataFrame(ArrayList<Column<T>> lista) {
+    public DataFrame(ArrayList<Column<?>> lista)  {
         // Empecemos con las validaciones
         // Validar que los largos de los arrays son iguales
         columns = new ArrayList<Column<Celda<?>>>();
@@ -68,9 +69,7 @@ public class DataFrame<T> {
         numCol = columns.size();
     }
 
-    // Helper methods to convert labels to indices
     private int colLabelToIndex(String columnLabel) {
-        // Use the colLabel map to find the index
         if (colLabel.containsKey(columnLabel)) {
             return colLabel.get(columnLabel);
         }
@@ -78,12 +77,10 @@ public class DataFrame<T> {
     }
 
     private int rowLabelToIndex(String rowLabelStr) {
-        // Use the rowLabel map to find the index
         if (rowLabel.containsKey(rowLabelStr)) {
             return rowLabel.get(rowLabelStr);
         }
         
-        // Fallback to searching in the first column if not in map
         if (columns.isEmpty()) {
             throw new IllegalStateException("DataFrame is empty");
         }
@@ -100,76 +97,97 @@ public class DataFrame<T> {
         throw new IllegalArgumentException("Row label not found: " + rowLabelStr);
     }
 
+    //getter de una columna si se le ingresa el número de columna
+    public Column getColumn(int column){
+        //Verifico que el índice sean válidos
+        if(column < 0 || column >= numCol){
+            throw new IndexOutOfBoundsException("Índice de columna inválido: " + column);
+        }
+        return columns.get(column);
+    }
+
+    //getter de una columna si se le ingresa el nombre de la columna
+    public Column getColumn(String column){
+        int colIndex = colLabelToIndex(column);
+        return columns.get(colIndex);
+    }
+
+    //getter de una fila si el índice es numérico:
+    public ArrayList<Celda<?>> getRow(int row){
+        //Verifico que el índice sean válidos
+        if(row < 0 || row >= numRow){
+            throw new IndexOutOfBoundsException("Índice de fila inválido:" + row);
+        }
+
+        ArrayList<Celda<?>> fila = new ArrayList<>();
+        for(int i = 0; i < numCol; i++){
+            Celda<?> celda = getCelda(row, i);
+            fila.add(celda);
+        }
+
+        return fila;
+    }
+
+    //getter de una fila si el índice es un string:
+    public ArrayList<Celda<?>> getRow(String row){
+        int rowIndex = rowLabelToIndex(row);
+        return getRow(rowIndex);
+    }
+
+
     //getter de celdas si se le ingresan ambos parámetros como ints
     public Celda getCelda(int row, int column) {
         //Verifico que los índices sean válidos
-        if(column < 0 || column >= this.numCol) {
+        if(column < 0 || column >= numCol){
             throw new IndexOutOfBoundsException("Índice de columna inválido:" + column);
         }
-        if(row < 0 || row >= this.numRow) {
+        if(row < 0 || row >= numRow){
             throw new IndexOutOfBoundsException("Índice de fila inválido:" + row);
         }
         //Busco la columna y luego la celda
-        Column columna = columns.get(column);
-        Celda celda = (Celda) columna.getList().get(row);
+        Column<?> columna = columns.get(column);
+        Celda<?> celda = columna.getList().get(row);
         return celda;
     }
 
     //getter de celdas si se le ingresa la fila como int y la columna como string
-    public Celda getCelda(int row, String column) {
-        //Verifico que el índice sea válido
-        if(row < 0 || row >= this.numRow) {
-            throw new IndexOutOfBoundsException("Índice de fila inválido:" + row);
-        }
+    public Celda getCelda(int row, String column){
         int colIndex = colLabelToIndex(column);
-        //Busco la columna y luego la celda
-        Column columna = columns.get(colIndex);
-        Celda celda = (Celda) columna.getList().get(row);
-        return celda;
+        return getCelda(row, colIndex);
     }
 
     //getter de celdas si se le ingresa la fila como string y la columna como string
-    public Celda getCelda(String row, int column) {
-        //Verifico que el índice sea válido
-        if(column < 0 || column >= this.numCol) {
-            throw new IndexOutOfBoundsException("Índice de columna inválido:" + column);
-        }
+    public Celda getCelda(String row, int column){
         int rowIndex = rowLabelToIndex(row);
-        //Busco la columna y luego la celda
-        Column columna = columns.get(column);
-        Celda celda = (Celda) columna.getList().get(rowIndex);
-        return celda;
+        return getCelda(rowIndex, column);
     }
 
     //getter de celdas si se le ingresan ambos parámetros como strings
-    public Celda getCelda(String row, String column) {
-        int colIndex = colLabelToIndex(column);
+    public Celda getCelda(String row, String column){
         int rowIndex = rowLabelToIndex(row);
-        //Busco la columna y luego la celda
-        Column columna = columns.get(colIndex);
-        Celda celda = (Celda) columna.getList().get(rowIndex);
-        return celda;
+        int colIndex = colLabelToIndex(column);
+        return getCelda(rowIndex, colIndex);
     }
 
     //setter de celda si ambos labels son índices numéricos
-    public void setCelda(int row, int column, T value) {
+    public void setCelda(int row, int column, Object value){
         //Verifico que los índices sean válidos
-        if(column < 0 || column >= this.numCol) {
+        if(column < 0 || column >= numCol){
             throw new IndexOutOfBoundsException("Índice de columna inválido:" + column);
         }
-        if(row < 0 || row >= this.numRow) {
+        if(row < 0 || row >= numRow) {
             throw new IndexOutOfBoundsException("Índice de fila inválido:" + row);
         }
         //Verifico que el tipo del objeto sea válido para esta columna
-        if (!this.columns.get(column).validateType(value)) {
+        if (!this.columns.get(column).validateType(value)){
             throw new IllegalArgumentException("Tipo de valor inválido para esta columna.");
         }
         //Busco la celda y le cambio el valor
-        columns.get(column).getList().get(row).setValue(value);
+        getCelda(row, column).setValue(value);
     }
 
     //setter de celda si el label de la fila es un índice numérico y el de la columna un string
-    public void setCelda(int row, String column, T value) {
+    public void setCelda(int row, String column, Object value){
         //Verifico que el índice sea válido
         if(row < 0 || row >= this.numRow) {
             throw new IndexOutOfBoundsException("Índice de fila inválido:" + row);
@@ -180,11 +198,11 @@ public class DataFrame<T> {
             throw new IllegalArgumentException("Tipo de valor inválido para esta columna.");
         }
         //Busco la celda y le cambio el valor
-        this.columns.get(colIndex).getList().get(row).setValue(value);
+        getCelda(row, column).setValue(value);
     }
 
     //setter de celda si el label de la columna es un índice numérico y el de la fila un string
-    public void setCelda(String row, int column, T value) {
+    public void setCelda(String row, int column, Object value){
         //Verifico que el índice sea válido
         if(column < 0 || column >= this.numCol) {
             throw new IndexOutOfBoundsException("Índice de columna inválido:" + column);
@@ -195,11 +213,11 @@ public class DataFrame<T> {
             throw new IllegalArgumentException("Tipo de valor inválido para esta columna.");
         }
         //Busco la celda y le cambio el valor
-        this.columns.get(column).getList().get(rowIndex).setValue(value);
+        getCelda(row, column).setValue(value);
     }
 
     //setter de celda si ambos labels son strings
-    public void setCelda(String row, String column, T value) {
+    public void setCelda(String row, int column, Object value){
         int colIndex = colLabelToIndex(column);
         int rowIndex = rowLabelToIndex(row);
         //Verifico que el tipo del objeto sea válido para esta columna
@@ -207,7 +225,189 @@ public class DataFrame<T> {
             throw new IllegalArgumentException("Tipo de valor inválido para esta columna.");
         }
         //Busco la celda y le cambio el valor
-        this.columns.get(colIndex).getList().get(rowIndex).setValue(value);
+        getCelda(row, column).setValue(value);
+    }
+
+
+    // métodos que cree para que funcione el expo 
+    public List<Column<Celda<?>>> getColumns() {
+        return columns;
+    }
+
+    public int getNumRow() {
+        return numRow;
+    }
+
+    public int getNumCol() {
+        return numCol;
+    }
+
+    //Métodos de copias:
+    //Copia superficial:
+    public DataFrame shallowCopy(){
+        DataFrame copia = new DataFrame();
+        copia.columns = columns;
+        copia.numRow = numRow;
+        copia.numCol = numCol;
+
+        return copia;
+    }
+
+    //Copia profunda:
+    public DataFrame copy(){
+        DataFrame copia = new DataFrame();
+
+        //Recorro el dataframe por columnas:
+        for(int i = 0; i < numCol; i++){
+            Column colOriginal = getColumn(i);
+
+            Column colCopia = colOriginal.copy();
+            copia.addColumn(colCopia);
+        }
+
+        copia.numRow = numRow;
+        return copia;
+    }
+
+    public void select(ArrayList<?> rowLabels, ArrayList<?> colLabels){
+        Seleccionador.select(this, rowLabels, colLabels);
+    }
+
+    public static DataFrame leerCSV(String ruta){
+        LectorCSV lector = new LectorCSV();
+        DataFrame dataframe = lector.leer(ruta);
+        return dataframe;
+    }
+
+    public static DataFrame leerCSV(String ruta, String separador){
+        LectorCSV lector = new LectorCSV();
+        DataFrame dataframe = lector.leer(ruta, separador);
+        return dataframe;
+    }
+
+    // metodos que estoy creando porque faltaban
+    public void head(int cant) {
+        if (cant < 0 || cant > this.numRow) {
+            throw new IllegalArgumentException("Cantidad inválida");
+        }
+
+        // 1. Imprimir encabezados (nombres de columnas) si existen
+        for (Column<Celda<?>> columna : columns) {
+            System.out.print(columna.getName() + "\t"); // Usa tabulación o formato fijo
+        }
+        System.out.println(); // Salto de línea después de los encabezados
+
+        // 2. Imprimir las filas solicitadas
+        for (int i = 0; i < cant; i++) {
+            for (Column<Celda<?>> columna : columns) {
+                Celda<?> celda = columna.getList().get(i);
+                System.out.print(celda.getValue() + "\t"); // Asume que hay un método getValor()
+            }
+            System.out.println(); // Salto de línea después de cada fila
+            }
+    
+
+        if (cant < 0 || cant > this.numRow) {
+            throw new IllegalArgumentException("Cantidad inválida");
+        }
+
+        // Encabezados
+        for (Column<Celda<?>> columna : columns) {
+            System.out.print(columna.getName() + "\t"); // Usa tabulación o formato fijo
+        }
+        System.out.println(); // Salto de línea 
+
+        // Filas
+        for (int i = 0; i < cant; i++) {
+            for (Column<Celda<?>> columna : columns) {
+                Celda<?> celda = columna.getList().get(i);
+                System.out.print(celda.getValue() + "\t"); // Asume que hay un método getValor()
+            }
+            System.out.println(); // Salto de línea después de cada fila
+        }
+    
+    }
+
+    public void head() {
+        // Sobrecarga. Por defecto mostramos las primeras cinco filas
+        // encabezados
+        for (Column<Celda<?>> columna : columns) {
+            System.out.print(columna.getName() + "\t"); // Usa tabulación o formato fijo
+        }
+        System.out.println(); // Salto de línea después de los encabezados
+
+        // 2. Imprimir las filas solicitadas
+        for (int i = 0; i < 5; i++) {
+            for (Column<Celda<?>> columna : columns) {
+                Celda<?> celda = columna.getList().get(i);
+                System.out.print(celda.getValue() + "\t"); 
+            }
+            System.out.println(); // Salto de línea después de cada fila
+        }
+    }
+
+    public void tail(int cant) {
+        if (cant < 0 || cant > this.numRow) {
+            throw new IllegalArgumentException("Cantidad inválida");
+        }
+
+        // Calcular el índice de inicio (últimas 'cant' filas)
+        int startRow = this.numRow - cant;
+
+        // Imprimo encabezados (igual que en head())
+        for (Column<Celda<?>> columna : columns) {
+            System.out.print(columna.getName() + "\t");
+        }
+        System.out.println();
+
+        // itero desde startRow hasta el final
+        for (int i = startRow; i < this.numRow; i++) {
+            for (Column<Celda<?>> columna : columns) {
+                Celda<?> celda = columna.getList().get(i);
+                System.out.print(celda.getValue() + "\t");
+            }
+            System.out.println();
+        }
+    }
+
+    public void tail() {
+    
+        // Calculao del índice de inicio (últimas 'cant' filas)
+        int startRow = (this.numRow -5 >= 0) ? this.numRow -5 : 0; // Por defecto, mostrar las últimas 5 filas
+
+        // encabezados
+        for (Column<Celda<?>> columna : columns) {
+            System.out.print(columna.getName() + "\t");
+        }
+        System.out.println();
+
+        // filas
+        for (int i = startRow; i < this.numRow; i++) {
+            for (Column<Celda<?>> columna : columns) {
+                Celda<?> celda = columna.getList().get(i);
+                System.out.print(celda.getValue() + "\t");
+            }
+            System.out.println(); // salto de línea
+        }
+    }
+        
+    public void shape(){
+        System.out.println("[" + numRow + " x " + numCol +"]");
+        
+    }
+
+    public void showColumn(Column <Celda<?>> name) {
+        // Verifica si la columna existe
+        if (!columns.contains(name)) {
+            throw new IllegalArgumentException("Columna no encontrada: " + name.getName());
+        }
+        // Imprime el nombre de la columna
+        System.out.println("Columna: " + name.getName());
+        // Imprime los valores de la columna
+        for (Celda<?> celda : name.getList()) {
+            System.out.print(celda.getValue() + "\t");
+        }
+        System.out.println(); // Salto de línea al final
     }
     
     public Set<String> getRowLabels() {
@@ -252,3 +452,35 @@ public class DataFrame<T> {
         rowLabel = newRowLabel;
     }
 }
+    public void showRow(int rowIndex) {
+        // Verifica si el índice de fila es válido
+        if (rowIndex < 0 || rowIndex >= numRow) {
+            throw new IndexOutOfBoundsException("Índice de fila inválido: " + rowIndex);
+        }
+        // Imprime los valores de la fila
+        for (Column<Celda<?>> columna : columns) {
+            Celda<?> celda = columna.getList().get(rowIndex);
+            System.out.print(celda.getValue() + "\t");
+        }
+        System.out.println(); // Salto de línea al final    
+    }
+
+    public void columns() {
+        // Imprime los nombres de las columnas
+        for (Column<Celda<?>> columna : columns) {
+            System.out.print(columna.getName() + "\t");
+        }
+        System.out.println(); // Salto de línea al final
+    }
+
+    public void numCol(){
+        // Imprime el número de columnas
+        System.out.println("Número de columnas: " + numCol);
+    }
+
+    public void numRow(){
+        // Imprime el número de filas
+        System.out.println("Número de filas: " + numRow);
+    }
+}
+

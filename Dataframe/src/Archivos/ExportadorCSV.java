@@ -1,16 +1,15 @@
-package Exportador;
+package Archivos;
 import DataFrame.DataFrame;
 import Column.Column;
 import Celda.Celda;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 
-public class ExpoCSV<T> implements Exportador<T> {
+public class ExportadorCSV implements ExportadorArchivos {
     
     @Override
-    public void expo(DataFrame<T> dataframe, String nombreArchivo) {
+    public void exportar(DataFrame dataframe, String nombreArchivo) {
         if (dataframe == null || dataframe.getColumns().isEmpty()) {
             System.err.println("El DataFrame está vacío o no tiene columnas.");
             return;

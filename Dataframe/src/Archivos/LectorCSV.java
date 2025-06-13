@@ -1,19 +1,22 @@
-package DataFrame;
+package Archivos;
 
 import Celda.Celda;
-import Celda.CeldaBoolean;
-import Celda.CeldaNumber;
-import Celda.CeldaString;
 import Column.Column;
+import DataFrame.DataFrame;
+import DataFrame.TipoDatos;
 
-import javax.xml.crypto.Data;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class lectorCSV {
+public class LectorCSV implements LectorArchivos {
+
+    public LectorCSV(){
+
+    }
+
     protected static List<String> leerLineas(String nombreArchivo){
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(nombreArchivo))) {
             String linea;
@@ -56,11 +59,11 @@ public class lectorCSV {
 
     //Transforma cada celda en una Celda de su tipo de dato
     //Pasa de trabajar en filas a trabajar en columnas
-    protected static DataFrame<Column> crearDataframe(String[][] celdas){
+    protected static DataFrame crearDataframe(String[][] celdas){
         int cantColumnas = celdas[0].length;
         int cantFilas = celdas.length;
 
-        DataFrame<Column> dataframe = new DataFrame(cantFilas, cantColumnas);
+        DataFrame dataframe = new DataFrame(cantFilas, cantColumnas);
         List<Celda> listaCeldas = new ArrayList<Celda>();
 
         //Busco los tipos de datos y creo las celdas correspondientes:
@@ -69,22 +72,26 @@ public class lectorCSV {
                 //Si es una celda booleana:
                 if(celdas.equals("True") || celda.equals("true") ||
                         celda.equals("False") || celda.equals("false")){
-                    CeldaBoolean celdaBoolean = new CeldaBoolean(Boolean.valueOf(celda));
+                    TipoDatos tipoDato = TipoDatos.BOOLEAN;
+                    Celda celdaBoolean = new Celda(Boolean.valueOf(celda), tipoDato);
                     listaCeldas.add(celdaBoolean);
                 }
                 //Si es una celda number:
                 //*Primero pruebo para ints:
                 try{
-                    CeldaNumber celdaNumber = new CeldaNumber(Integer.valueOf(celda));
+                    TipoDatos tipoDato = TipoDatos.NUMBER;
+                    Celda celdaNumber = new Celda(Integer.valueOf(celda), tipoDato);
                     listaCeldas.add(celdaNumber);
                 } catch (NumberFormatException e) {
                     //*Luego pruebo para floats:
                     try{
-                        CeldaNumber celdaNumber = new CeldaNumber(Float.valueOf(celda));
+                        TipoDatos tipoDato = TipoDatos.NUMBER;
+                        Celda celdaNumber = new Celda(Float.valueOf(celda), tipoDato);
                         listaCeldas.add(celdaNumber);
                         //Sino es string:
                     } catch (NumberFormatException ex) {
-                        CeldaString celdaString = new CeldaString(celda);
+                        TipoDatos tipoDato = TipoDatos.STRING;
+                        Celda celdaString = new Celda(celda, tipoDato);
                         listaCeldas.add(celdaString);
                     }
                 }
@@ -97,16 +104,17 @@ public class lectorCSV {
                 listaCeldasAux.add(listaCeldas.get(i));
             }
             String nombreCol = String.valueOf(listaCeldasAux.get(0).getValue());
-            String tipoCol = String.valueOf(listaCeldasAux.get(1).getTipo().toUpperCase());
+            TipoDatos tipoCol = listaCeldasAux.get(1).getTipoDato();
 
-            Column<Celda> columnaAux = new Column<Celda>(listaCeldasAux);
+            Column<Celda> columnaAux = new Column<Celda>(nombreCol, tipoCol, listaCeldasAux);
             dataframe.addColumn(columnaAux);
         }
 
         return dataframe;
     }
 
-    public static DataFrame<Column> leerCSV(String rutaArchivo){
+    @Override
+    public DataFrame leer(String rutaArchivo){
         List<String> lineasLeidas = leerLineas(rutaArchivo);
         String[][] celdas;
         try {
@@ -118,7 +126,8 @@ public class lectorCSV {
         }
     }
 
-    protected static DataFrame<Column> leerCSV(String rutaArchivo, String separador){
+    @Override
+    public DataFrame leer(String rutaArchivo, String separador){
         List<String> lineasLeidas = leerLineas(rutaArchivo);
         String[][] celdas;
         try {
