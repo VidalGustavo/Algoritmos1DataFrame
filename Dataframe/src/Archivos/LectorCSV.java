@@ -61,7 +61,7 @@ public class LectorCSV implements LectorArchivos {
     //Pasa de trabajar en filas a trabajar en columnas
     protected static DataFrame crearDataframe(String[][] celdas){
         int cantColumnas = celdas[0].length;
-        int cantFilas = celdas.length - 1;
+        int cantFilas = celdas.length;
 
         DataFrame dataframe = new DataFrame();
         List<Celda> listaCeldas = new ArrayList<Celda>();
