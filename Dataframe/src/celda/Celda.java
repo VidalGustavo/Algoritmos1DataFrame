@@ -78,7 +78,13 @@ public class Celda<T> implements Comparable<Celda<T>> {
         }
         
         if (this.value instanceof Comparable) {
-            return ((Comparable<T>) this.value).compareTo(o.value);
+            if (this.tipoDato == TipoDatos.NUMBER) {
+                // Number no implementa Comparable -.-"
+                Number este = (Number) this.value;
+                Number otro = (Number) o.value;
+                return ((Double) (este.doubleValue())).compareTo((Double) otro.doubleValue());
+            }
+            return ((Comparable) this.value).compareTo(o.value);
         } else {
             throw new ClassCastException("El valor de la celda no es comparable. Los tipos de datos deben implementar Comparable.");
         }
