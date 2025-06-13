@@ -26,6 +26,7 @@ public class Column<T> {
     }
 
     public Column(ArrayList<Celda<T>> list) throws IllegalArgumentException {
+        // la primera es el encavezado de la columna.
         name = String.valueOf(list.get(0).getValue());
 
         // Define tipo celda.
@@ -44,8 +45,9 @@ public class Column<T> {
                throw new IllegalArgumentException("Tipo de celda en el indice " + i + " no coincide con el tipo de columna.");
             }
         }
+        list.remove(0); // Elimina el encabezado de la columna.
         this.list = list;
-        size = list.size()-1;
+        size = list.size();
     }
 
     // Getters y Setters
