@@ -308,27 +308,6 @@ public class DataFrame {
             }
             System.out.println(); // Salto de línea después de cada fila
         }
-
-
-        if (cant < 0 || cant > this.numRow) {
-            throw new IllegalArgumentException("Cantidad inválida");
-        }
-
-        // Encabezados
-        for (Column<Celda<?>> columna : columns) {
-            System.out.print(columna.getName() + "\t"); // Usa tabulación o formato fijo
-        }
-        System.out.println(); // Salto de línea
-
-        // Filas
-        for (int i = 0; i < cant; i++) {
-            for (Column<Celda<?>> columna : columns) {
-                Celda<?> celda = columna.getList().get(i);
-                System.out.print(celda.getValue() + "\t"); // Asume que hay un método getValor()
-            }
-            System.out.println(); // Salto de línea después de cada fila
-        }
-
     }
 
     public void head() {
