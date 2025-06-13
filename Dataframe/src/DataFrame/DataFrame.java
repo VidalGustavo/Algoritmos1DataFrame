@@ -276,6 +276,24 @@ public class DataFrame {
         Seleccionador.select(this, rowLabels, colLabels);
     }
 
+    public static void tail() {
+        Seleccionador.tail(this);
+    }
+
+    public static void tail(int cant) {
+        Seleccionador.tail(this, cant); 
+    }
+
+    public static void head() {
+        Seleccionador.head(this);
+    }
+
+    public static void head(DataFrame dataframe, int cant) {
+        Seleccionador.head(dataframe, cant);
+    }
+
+
+
     public static DataFrame leerCSV(String ruta, boolean encabezado) {
         LectorCSV lector = new LectorCSV();
         DataFrame dataframe = lector.leer(ruta, encabezado);
@@ -289,89 +307,13 @@ public class DataFrame {
     }
 
     // metodos que estoy creando porque faltaban
-    public void head(int cant) {
-        if (cant < 0 || cant > this.numRow) {
-            throw new IllegalArgumentException("Cantidad inválida");
-        }
+    
 
-        // 1. Imprimir encabezados (nombres de columnas) si existen
-        for (Column<Celda<?>> columna : columns) {
-            System.out.print(columna.getName() + "\t"); // Usa tabulación o formato fijo
-        }
-        System.out.println(); // Salto de línea después de los encabezados
+    
 
-        // 2. Imprimir las filas solicitadas
-        for (int i = 0; i < cant; i++) {
-            for (Column<Celda<?>> columna : columns) {
-                Celda<?> celda = columna.getList().get(i);
-                System.out.print(celda.getValue() + "\t"); // Asume que hay un método getValor()
-            }
-            System.out.println(); // Salto de línea después de cada fila
-        }
-    }
+    
 
-    public void head() {
-        // Sobrecarga. Por defecto mostramos las primeras cinco filas
-        // encabezados
-        for (Column<Celda<?>> columna : columns) {
-            System.out.print(columna.getName() + "\t"); // Usa tabulación o formato fijo
-        }
-        System.out.println(); // Salto de línea después de los encabezados
-
-        // 2. Imprimir las filas solicitadas
-        for (int i = 0; i < 5; i++) {
-            for (Column<Celda<?>> columna : columns) {
-                Celda<?> celda = columna.getList().get(i);
-                System.out.print(celda.getValue() + "\t");
-            }
-            System.out.println(); // Salto de línea después de cada fila
-        }
-    }
-
-    public void tail(int cant) {
-        if (cant < 0 || cant > this.numRow) {
-            throw new IllegalArgumentException("Cantidad inválida");
-        }
-
-        // Calcular el índice de inicio (últimas 'cant' filas)
-        int startRow = this.numRow - cant;
-
-        // Imprimo encabezados (igual que en head())
-        for (Column<Celda<?>> columna : columns) {
-            System.out.print(columna.getName() + "\t");
-        }
-        System.out.println();
-
-        // itero desde startRow hasta el final
-        for (int i = startRow; i < this.numRow; i++) {
-            for (Column<Celda<?>> columna : columns) {
-                Celda<?> celda = columna.getList().get(i);
-                System.out.print(celda.getValue() + "\t");
-            }
-            System.out.println();
-        }
-    }
-
-    public void tail() {
-
-        // Calculao del índice de inicio (últimas 'cant' filas)
-        int startRow = (this.numRow - 5 >= 0) ? this.numRow - 5 : 0; // Por defecto, mostrar las últimas 5 filas
-
-        // encabezados
-        for (Column<Celda<?>> columna : columns) {
-            System.out.print(columna.getName() + "\t");
-        }
-        System.out.println();
-
-        // filas
-        for (int i = startRow; i < this.numRow; i++) {
-            for (Column<Celda<?>> columna : columns) {
-                Celda<?> celda = columna.getList().get(i);
-                System.out.print(celda.getValue() + "\t");
-            }
-            System.out.println(); // salto de línea
-        }
-    }
+    
 
     public void shape() {
         System.out.println("[" + numRow + " x " + numCol + "]");
