@@ -393,5 +393,50 @@ public class DataFrame {
         // Imprime el número de filas
         System.out.println("Número de filas: " + numRow);
     }
+    
+
+    public void deleteRow(int rowIndex) {
+        // Verifico que el índice sea válido
+        if (rowIndex < 0 || rowIndex >= this.numRow) {
+            throw new IndexOutOfBoundsException("Índice de fila inválido: " + rowIndex);
+        }
+        
+        // Elimino la celda correspondiente en cada columna
+        for (Column<Celda<?>> columna : columns) {
+            columna.getList().remove(rowIndex);
+        }
+        
+        // Actualizo el contador de filas
+        this.numRow--;
+    
+
+    public void deleteRow(String rowLabel) {
+        // Convierto la etiqueta a índice
+        int rowIndex = rowLabelToIndex(rowLabel);
+        
+        // Utilizo el método que elimina por índice
+        deleteRow(rowIndex);
+    }
+    
+    public void deleteColumn(int colIndex) {
+        // Verifico que el índice sea válido
+        if (colIndex < 0 || colIndex >= this.numCol) {
+            throw new IndexOutOfBoundsException("Índice de columna inválido: " + colIndex);
+        }
+        
+        // Elimino la columna de la lista de columnas
+        this.columns.remove(colIndex);
+        
+        // Actualizo el contador de columnas
+        this.numCol--;
+    }
+    
+    public void deleteColumn(String colLabel) {
+        // Convierto la etiqueta a índice
+        int colIndex = colLabelToIndex(colLabel);
+        
+        // Utilizo el método que elimina por índice
+        deleteColumn(colIndex);
+    }
 }
 
