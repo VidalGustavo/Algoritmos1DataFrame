@@ -505,6 +505,70 @@ public class DataFrame {
         return colLabel.keySet();
     }
 
+ 
+    public DataFrame concatColumns(DataFrame other) {
+        if (this.numRow != other.numRow) {
+            throw new IllegalArgumentException("DataFrames must have the same number of rows to concatenate columns");
+        }
+
+        DataFrame result = this.copy();
+        
+        // Add all columns from the other DataFrame
+        for (Column<Celda<?>> col : other.getColumns()) {
+            result.addColumn(col.copy());
+        }
+
+        return result;
+    }
+
+   
+    public DataFrame concatArray(Object[] array, String columnName) {
+        if (array.length != this.numRow) {
+            throw new IllegalArgumentException("Array length must match DataFrame row count");
+        }
+
+        DataFrame result = this.copy();
+        
+        // Create a new column from the array
+        ArrayList<Celda<?>> cells = new ArrayList<>();
+        for (Object value : array) {
+            Celda<?> cell = new Celda<>(value);
+            cells.add(cell);
+        }
+        
+        Column<Celda<?>> newColumn = new Column<>(columnName, cells.get(0).getClass(), cells);
+        result.addColumn(newColumn);
+
+        return result;
+    }
+
+    public DataFrame concatArrays(Object[][] arrays, String[] columnNames) {
+        if (columnNames.length != arrays.length) {
+            throw new IllegalArgumentException("Number of column names must match number of arrays");
+        }
+
+        DataFrame result = this.copy();
+        
+        // Process each array and add it as a new column
+        for (int i = 0; i < arrays.length; i++) {
+            Object[] array = arrays[i];
+            if (array.length != this.numRow) {
+                throw new IllegalArgumentException("Each array length must match DataFrame row count");
+            }
+
+            ArrayList<Celda<?>> cells = new ArrayList<>();
+            for (Object value : array) {
+                Celda<?> cell = new Celda<>(value);
+                cells.add(cell);
+            }
+            
+            Column<Celda<?>> newColumn = new Column<>(columnNames[i], cells.get(0).getClass(), cells);
+            result.addColumn(newColumn);
+        }
+
+        return result;
+    }
+
     public void renameCols(String[] newNames) {
         if (newNames.length != numCol) {
             throw new IllegalArgumentException("Cantidad de nombres deb ser igual a la cantidad de columnas");
