@@ -11,6 +11,7 @@ import java.util.Set;
 import Archivos.LectorCSV;
 import Celda.Celda;
 import Column.Column;
+import Filter.FilterPipeline;
 
 import java.util.*;
 
@@ -317,7 +318,14 @@ public class DataFrame {
 
     public void shape() {
         System.out.println("[" + numRow + " x " + numCol + "]");
+    }
 
+    /**
+     * Creates a new filter pipeline for this DataFrame
+     * @return A FilterPipeline object that can be used to build and apply filters
+     */
+    public FilterPipeline filter() {
+        return new FilterPipeline();
     }
 
     public void showRow(int rowIndex) {
@@ -465,13 +473,13 @@ public class DataFrame {
 
    
     public DataFrame concatArray(Object[] array, String columnName) {
-        if (array.length != this.numRow) {
+        if (array.length != this.getNumRow()) {
             throw new IllegalArgumentException("Array length must match DataFrame row count");
         }
 
-        DataFrame result = this.copy();
+        // Creo un DataFrame con una sola columna a partir del array
+        DataFrame singleColumnDF = new DataFrame();
         
-        // Creo una nueva columna a partir del array
         ArrayList<Celda<?>> cells = new ArrayList<>();
         for (Object value : array) {
             Celda<?> cell = new Celda<>(value);
@@ -479,9 +487,10 @@ public class DataFrame {
         }
         
         Column<Celda<?>> newColumn = new Column<>(columnName, cells.get(0).getClass(), cells);
-        result.addColumn(newColumn);
-
-        return result;
+        singleColumnDF.addColumn(newColumn);
+        
+        // Uso el método concatColumns para combinar los DataFrames
+        return this.concatColumns(singleColumnDF);
     }
 
     public DataFrame concatArrays(Object[][] arrays, String[] columnNames) {
@@ -491,21 +500,9 @@ public class DataFrame {
 
         DataFrame result = this.copy();
         
-        // Proceso cada array y lo agrego como una nueva columna
+        // Proceso cada array usando concatArray
         for (int i = 0; i < arrays.length; i++) {
-            Object[] array = arrays[i];
-            if (array.length != this.numRow) {
-                throw new IllegalArgumentException("Each array length must match DataFrame row count");
-            }
-
-            ArrayList<Celda<?>> cells = new ArrayList<>();
-            for (Object value : array) {
-                Celda<?> cell = new Celda<>(value);
-                cells.add(cell);
-            }
-            
-            Column<Celda<?>> newColumn = new Column<>(columnNames[i], cells.get(0).getClass(), cells);
-            result.addColumn(newColumn);
+            result = result.concatArray(arrays[i], columnNames[i]);
         }
 
         return result;
