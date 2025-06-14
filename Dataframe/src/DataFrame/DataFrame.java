@@ -1,12 +1,7 @@
 package DataFrame;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.stream.IntStream;
-import java.util.Map;
-import java.util.Set;
 
 import Archivos.LectorCSV;
 import Celda.Celda;
@@ -695,22 +690,54 @@ public class DataFrame {
 
 //###############################################
 
-    public void addColumnFromList(List<Celda<?>> list, String name) {
+    public void addColumnFromList(List<?> list, String name) {
         if (list.isEmpty()) {
             throw new IllegalArgumentException("La lista no puede estar vacía");
         }
+        // Verifica que el tamaño de la lista coincida con el número de filas del DataFrame
+        if (list.size() != numRow) {
+            throw new IllegalArgumentException("El tamaño de la lista debe coincidir con el número de filas del DataFrame");
+        }
+        // Verifica que el nombre de la columna no exista ya
+        if (colLabel.containsKey(name)) {
+            throw new IllegalArgumentException("Ya existe una columna con el nombre: " + name);
+        }
+        // Verifica que todos los elementos de la lista sean del mismo tipo
+        if (list.stream().anyMatch(Objects::isNull)) {
+            throw new IllegalArgumentException("La lista no puede contener valores nulos");
+        }
+        // Determina el tipo de dato de la primera celda
+        Class<?> firstElementClass = list.get(0).getClass();
+        // Verifica que todos los elementos de la lista sean del mismo tipo
+        if (!list.stream().allMatch(element -> element.getClass().equals(firstElementClass))) {
+            throw new IllegalArgumentException("Todos los elementos de la lista deben ser del mismo tipo");
         
-        // Verifica que todas las celdas tengan el mismo tipo de dato
-        TipoDatos tipoDato = list.get(0).getTipoDato();
-        for (Celda<?> celda : list) {
-            if (celda.getTipoDato() != tipoDato) {
-                throw new IllegalArgumentException("Todas las celdas deben tener el mismo tipo de dato");
-            }
+        
         }
 
-        Column<Celda<?>> nuevaColumna = new Column<ArrayList<Celda<?>>>(name, tipoDato, new ArrayList<Celda<?>>(list));
-        addColumn(nuevaColumna);
+        
+        // Crea una lista de celdas a partir de la lista proporcionada
+        ArrayList<Celda<?>> celdas = new ArrayList<>();
+        for (Object element : list) {
+            TipoDatos tipoDato;
+            if (element instanceof String) {
+                tipoDato = TipoDatos.STRING;
+            } else if (element instanceof Number) {
+                        tipoDato = TipoDatos.NUMBER;
+            } else if (element instanceof Boolean) {
+                        tipoDato = TipoDatos.BOOLEAN;
+            } else {
+                throw new IllegalArgumentException("El valor " + element.toString() +" tiene Tipo de dato no soportado: " + element.getClass().getSimpleName());
+            }
+            
+            
+            Celda<?> celda = new Celda<>(element, tipoDato);
+            celdas.add(celda);
+        
+        }
+        
     }
+    
 
 
 
