@@ -1,7 +1,7 @@
 package DataFrame;
 
 import Column.Column;
-
+import Celda.Celda;
 import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
@@ -194,7 +194,7 @@ public class Seleccionador {
     // #####################################//
 
 
-    public void head(DataFrame dataframe, int cant) {
+    public static void head(DataFrame dataframe, int cant) {
         if (cant < 0 || cant > dataframe.getNumRow()) {
             throw new IllegalArgumentException("Cantidad inválida");
         }
@@ -216,7 +216,7 @@ public class Seleccionador {
     }
 
 
-    public void head(DataFrame dataframe) {
+    public static void head(DataFrame dataframe) {
         // Sobrecarga. Por defecto mostramos las primeras cinco filas
         // encabezados
         for (Column<Celda<?>> columna : dataframe.getColumns()) {
@@ -234,7 +234,7 @@ public class Seleccionador {
         }
     }
 
-    public void tail(DataFrame dataFrame, int cant) {
+    public static void tail(DataFrame dataFrame, int cant) {
         if (cant < 0 || cant > dataFrame.getNumRow()) {
             throw new IllegalArgumentException("Cantidad inválida");
         }
@@ -257,7 +257,7 @@ public class Seleccionador {
             System.out.println();
         }
     }
-    public void tail(DataFrame dataFrame) {
+    public static void tail(DataFrame dataFrame) {
 
         // Calcular el índice de inicio (últimas 'cant' filas)
         int startRow = (dataFrame.getNumRow() - 5 >= 0) ? dataFrame.getNumRow() - 5 : 0; // Por defecto, mostrar las últimas 5 filas
