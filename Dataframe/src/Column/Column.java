@@ -21,6 +21,7 @@ public class Column<T> extends ArrayList<T>{
     public Column(TipoDatos tipoCelda){
         list = new ArrayList<Celda<T>>();
         size = 0;
+        this.tipoCelda = tipoCelda;
     }
 
     public Column(String name, TipoDatos tipoCelda, ArrayList<Celda<T>> list) {
@@ -52,7 +53,7 @@ public class Column<T> extends ArrayList<T>{
         }
         list.remove(0); // Elimina el encabezado de la columna.
         this.list = list;
-        size = list.size();
+        this.size = list.size();
     }
 
     // Getters y Setters
@@ -60,12 +61,6 @@ public class Column<T> extends ArrayList<T>{
         String name = new String(this.name);
         return name;
     }
-
-    @Override
-    public int size() {
-        return getSize();
-    }
-
     public int getSize() {
         return size;
     }
@@ -76,6 +71,11 @@ public class Column<T> extends ArrayList<T>{
 
     public TipoDatos getTipoCelda() {
         return tipoCelda;
+    }
+
+    @Override
+    public int size() {
+        return getSize();
     }
 
     public void setName(String name) {
@@ -96,10 +96,17 @@ public class Column<T> extends ArrayList<T>{
     }
 
     public void addCelda(Celda<T> celda){
+        if (!this.validateType(celda.getValue())){
+               throw new IllegalArgumentException("Tipo de celda no coincide con el tipo de columna.");
+            }
         list.add(celda);
         size = list.size();
     }
 
+    /**
+     * Copia profunda
+     * 
+     */
     public Column<T> copy(){
         ArrayList<Celda<T>> celdasCopia = new ArrayList<>();
         for(Celda<T> celdaOriginal : list){
