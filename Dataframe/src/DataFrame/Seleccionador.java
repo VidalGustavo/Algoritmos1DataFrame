@@ -1,8 +1,8 @@
 package DataFrame;
 
-import Column.Column;
 import Celda.Celda;
-import javax.xml.crypto.Data;
+import Column.Column;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +56,7 @@ public class Seleccionador {
         System.out.println(labels);
 
         int cantRows = dataFrame.getNumRow();
-        for(int i = 1; i < cantRows; i++){//empieza en i=1 ya que i=0 es el label
+        for(int i = 0; i < cantRows; i++){
             String mostrar = "| ";
             for(Column<?> columna : columnas){
                 mostrar += columna.getList().get(i).getValue() + " | ";
@@ -132,11 +132,10 @@ public class Seleccionador {
             throw new RuntimeException("No hay filas ni columnas seleccionadas.");
         }
 
-
         if(rowLabels.isEmpty()){ //Muestra todas las filas de algunas columnas
             selectColumns(dataFrame, colLabels);
             return;
-        }else if(colLabels.isEmpty()){ //Muestra todas las columnas de algunas filas
+        }else if(colLabels.isEmpty()){ //Muestra todas las columnas con algunas filas
             selectRows(dataFrame, rowLabels);
             return;
         }
