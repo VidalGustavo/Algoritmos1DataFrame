@@ -1,7 +1,7 @@
 package Archivos;
 
-import Celda.Celda;
-import Column.Column;
+import DataFrame.Celda;
+import DataFrame.Column;
 import DataFrame.DataFrame;
 import DataFrame.TipoDatos;
 

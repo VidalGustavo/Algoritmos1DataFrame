@@ -1,10 +1,6 @@
 package DataFrame;
 
-import Column.Column;
-import Celda.Celda;
-import Filter.FilterPipeline;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class DataFrameTest {
     private DataFrame df;

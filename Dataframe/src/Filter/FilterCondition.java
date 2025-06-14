@@ -1,6 +1,5 @@
 package Filter;
 
-import Celda.Celda;
 import DataFrame.DataFrame;
 
 /**

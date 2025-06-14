@@ -5,9 +5,10 @@ import java.util.stream.IntStream;
 
 import Archivos.LectorCSV;
 import Archivos.ExportadorCSV;
-import Celda.Celda;
-import Column.Column;
 import Filter.FilterPipeline;
+import Operaciones.MuestreadorRandom;
+import Operaciones.Seleccionador;
+import Operaciones.Visualizador;
 
 import java.util.*;
 
@@ -133,13 +134,13 @@ public class DataFrame {
         numCol = columns.size();
     }
 
-    protected int colLabelToIndex(String columnLabel) {
+    public int colLabelToIndex(String columnLabel) {
         if (colLabel.containsKey(columnLabel)) {
             return colLabel.get(columnLabel);
         }
         throw new IllegalArgumentException("Column label not found: " + columnLabel);
     }
-    protected int rowLabelToIndex(String rowLabelStr) {
+    public int rowLabelToIndex(String rowLabelStr) {
         if (rowLabel.containsKey(rowLabelStr)) {
             return rowLabel.get(rowLabelStr);
         }
@@ -555,7 +556,7 @@ public class DataFrame {
             } else {
                 throw new IllegalArgumentException("El valor " + value.toString() + " tiene Tipo de dato no soportado: " + value.getClass().getSimpleName());
             }
-            Celda<?> cell = new Celda<>(value, tipoDato);
+            Celda cell = new Celda(value, tipoDato);
             cells.add(cell);
         }
         
@@ -749,7 +750,7 @@ public class DataFrame {
             }
             
             
-            Celda<?> celda = new Celda<>(element, tipoDato);
+            Celda celda = new Celda(element, tipoDato);
             celdas.add(celda);
         
         }

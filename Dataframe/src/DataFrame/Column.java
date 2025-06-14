@@ -1,8 +1,6 @@
-package Column;
+package DataFrame;
 
 import java.util.ArrayList;
-import Celda.Celda;
-import DataFrame.TipoDatos;
 
 public class Column<T> extends ArrayList<T>{
     private ArrayList<Celda<T>> list;

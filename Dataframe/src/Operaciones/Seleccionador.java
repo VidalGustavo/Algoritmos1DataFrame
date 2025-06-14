@@ -1,7 +1,8 @@
-package DataFrame;
+package Operaciones;
 
-import Celda.Celda;
-import Column.Column;
+import DataFrame.Celda;
+import DataFrame.Column;
+import DataFrame.DataFrame;
 
 import java.util.ArrayList;
 import java.util.List;

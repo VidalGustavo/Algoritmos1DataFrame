@@ -1,7 +1,7 @@
 package Archivos;
 import DataFrame.DataFrame;
-import Column.Column;
-import Celda.Celda;
+import DataFrame.Column;
+import DataFrame.Celda;
 
 import java.io.FileWriter;
 import java.io.IOException;
