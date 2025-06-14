@@ -277,7 +277,7 @@ public class DataFrame {
         Seleccionador.select(this, rowLabels, colLabels);
     }
 
-    public  void tail() {
+    public void tail() {
         Seleccionador.tail(this);
     }
 
@@ -289,11 +289,17 @@ public class DataFrame {
         Seleccionador.head(this);
     }
 
-    public static void head(DataFrame dataframe, int cant) {
+    public void head(DataFrame dataframe, int cant) {
         Seleccionador.head(dataframe, cant);
     }
 
+    public DataFrame randomSample(double porcentaje){
+        return MuestreadorRandom.sample(this, porcentaje);
+    }
 
+    public DataFrame randomSample(){
+        return MuestreadorRandom.sample(this);
+    }
 
     public static DataFrame leerCSV(String ruta, boolean encabezado) {
         LectorCSV lector = new LectorCSV();
