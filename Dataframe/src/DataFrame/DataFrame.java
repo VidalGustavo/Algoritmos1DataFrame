@@ -39,22 +39,60 @@ public class DataFrame {
         rowLabel = new HashMap<>();
     }
 
-    public DataFrame(ArrayList<Column<?>> lista) {
-        // Empecemos con las validaciones
-        // Validar que los largos de los arrays son iguales
+    /**
+     * Este constructor espera la informacion pasada como ArrayList de Column,.
+     * o si no son columns un ArrayList representando columnas.
+     * 
+     */
+    public DataFrame(ArrayList<ArrayList<?>> lista) {
+        
+        if (lista.isEmpty()) {
+            throw new IllegalArgumentException("El arreglo bidimiensional esta vacío");
+        }
+        int sizeEsperado = lista.get(0).size();
+        for (int i = 1; i < lista.size(); i++) {
+            if (lista.get(i).size() != sizeEsperado) {
+                throw new IllegalArgumentException("El arreglo bidimensional debe tener el mismo largo en todas las columnas");
+            }
+        }
+
         columns = new ArrayList<Column<Celda<?>>>();
         colLabel = new HashMap<>();
         rowLabel = new HashMap<>();
 
-        // Add columns and update colLabel map
-        for (int i = 0; i < lista.size(); i++) {
-            Column<?> col = lista.get(i);
-            columns.add((Column<Celda<?>>) col);
-            colLabel.put(col.getName(), i);
+        // Si son columnas las agrega.
+        if (lista.get(0) instanceof Column) {
+            // Add columns and update colLabel map
+            for (int i = 0; i < lista.size(); i++) {
+                Column<?> col = (Column) lista.get(i);
+                columns.add((Column<Celda<?>>) col);
+                colLabel.put(col.getName(), i);
+            }
+            numCol = columns.size();
+            numRow = columns.isEmpty() ? 0 : columns.get(0).getSize();
+        } else {
+            for (int i = 0; i < lista.size(); i++) {
+                ArrayList<?> linealArray = lista.get(i);
+                ArrayList<Celda<?>> arrayCelda = new ArrayList<>();
+                for (Object value : linealArray) {
+                    TipoDatos tipoDato;
+                    if (value instanceof String) {
+                        tipoDato = TipoDatos.STRING;
+                    } else if (value instanceof Number) {
+                        tipoDato = TipoDatos.NUMBER;
+                    } else if (value instanceof Boolean) {
+                        tipoDato = TipoDatos.BOOLEAN;
+                    } else {
+                        throw new IllegalArgumentException("El valor " + value.toString() +" tiene Tipo de dato no soportado: " + value.getClass().getSimpleName());
+                    }
+                    Celda<?> celda = new Celda(value, tipoDato);
+                    arrayCelda.add(celda);
+                }
+                Column nuevaColumna = new Column(arrayCelda); // aca valida que todas las celdas tengan el mismo tipo.
+                this.addColumn(nuevaColumna);
+                this.numRow = arrayCelda.size();
+            }
         }
-
-        numCol = columns.size();
-        numRow = columns.isEmpty() ? 0 : columns.get(0).getSize();
     }
 
     public DataFrame(ArrayList<?> linealArray, Boolean hasHeader){

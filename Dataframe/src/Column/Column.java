@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import Celda.Celda;
 import DataFrame.TipoDatos;
 
-public class Column<T> {
+public class Column<T> extends ArrayList<T>{
     private ArrayList<Celda<T>> list;
     private String name;
     private int size;
@@ -54,6 +54,11 @@ public class Column<T> {
     public String getName() {
         String name = new String(this.name);
         return name;
+    }
+
+    @Override
+    public int size() {
+        return getSize();
     }
 
     public int getSize() {
