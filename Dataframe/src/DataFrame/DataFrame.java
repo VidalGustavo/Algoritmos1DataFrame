@@ -479,19 +479,19 @@ public class DataFrame {
 
         // Creo un DataFrame con una sola columna a partir del array
         DataFrame singleColumnDF = new DataFrame();
+        TipoDatos tipoDato;
+        if (array.get(0) instanceof String) {
+            tipoDato = TipoDatos.STRING;
+        } else if (array.get(0) instanceof Number) {
+            tipoDato = TipoDatos.NUMBER;
+        } else if (array.get(0) instanceof Boolean) {
+            tipoDato = TipoDatos.BOOLEAN;
+        } else {
+            throw new IllegalArgumentException("El valor " + value.toString() +" tiene Tipo de dato no soportado: " + value.getClass().getSimpleName());
+        }
         
-        ArrayList<Celda<?>> cells = new ArrayList<>();
+        ArrayList<Celda<tipoDato>> cells = new ArrayList<>();
         for (Object value : array) {
-            TipoDatos tipoDato;
-            if (value instanceof String) {
-                tipoDato = TipoDatos.STRING;
-            } else if (value instanceof Number) {
-                tipoDato = TipoDatos.NUMBER;
-            } else if (value instanceof Boolean) {
-                tipoDato = TipoDatos.BOOLEAN;
-            } else {
-                throw new IllegalArgumentException("El valor " + value.toString() +" tiene Tipo de dato no soportado: " + value.getClass().getSimpleName());
-            }
             Celda<?> cell = new Celda<>(value,tipoDato);
             cells.add(cell);
         }
