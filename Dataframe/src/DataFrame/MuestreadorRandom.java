@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class MuestreadorRandom {
-    public static ArrayList<Integer> generateRandomIndexes(int maxIndexes, int numIndexes){
+    private static ArrayList<Integer> generateRandomIndexes(int maxIndexes, int numIndexes){
         //Verifico que no se pidan más indices de los máximos disponibles:
         if(numIndexes > maxIndexes){
             throw new IllegalArgumentException("No se pueden generar más índices únicos que la cantidad total disponible.");
