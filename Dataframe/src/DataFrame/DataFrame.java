@@ -276,15 +276,15 @@ public class DataFrame {
         Seleccionador.select(this, rowLabels, colLabels);
     }
 
-    public static void tail() {
+    public  void tail() {
         Seleccionador.tail(this);
     }
 
-    public static void tail(int cant) {
+    public void tail(int cant) {
         Seleccionador.tail(this, cant); 
     }
 
-    public static void head() {
+    public void head() {
         Seleccionador.head(this);
     }
 
