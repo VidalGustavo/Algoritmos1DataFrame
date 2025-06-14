@@ -140,7 +140,7 @@ public class DataFrameTest {
             System.out.println("ERROR: La columna 'years' debería existir después de renombrarla");
         }
         
-        // Test row deletion
+        // Probar eliminación de filas
         int initialRows = df.getNumRow();
         df.deleteRow(0);
         if (df.getNumRow() != initialRows - 1) {
@@ -150,7 +150,7 @@ public class DataFrameTest {
             System.out.println("ERROR: La primera fila debería contener 'Bob' después de la eliminación");
         }
 
-        // Test column deletion
+        // Probar eliminación de columnas
         int initialCols = df.getNumCol();
         df.deleteColumn("active");
         if (df.getNumCol() != initialCols - 1) {
@@ -159,7 +159,7 @@ public class DataFrameTest {
     }
 
     private void testFiltering() {
-        // Test simple filter
+        // Probar filtro simple
         DataFrame filtered = df.filter()
             .where("age", ">", 30)
             .apply(df);
@@ -170,7 +170,7 @@ public class DataFrameTest {
             System.out.println("ERROR: El DataFrame filtrado debería contener solo edades > 30");
         }
 
-        // Test complex filter with AND
+        // Probar filtro complejo con AND
         filtered = df.filter()
             .where("age", ">", 30)
             .and("active", "=", true)
@@ -185,7 +185,7 @@ public class DataFrameTest {
             System.out.println("ERROR: El DataFrame filtrado debería contener solo active = true");
         }
 
-        // Test filter with OR
+        // Probar filtro con OR
         filtered = df.filter()
             .where("name", "=", "Alice")
             .or("name", "=", "Bob")
@@ -196,7 +196,7 @@ public class DataFrameTest {
     }
 
     private void testCopying() {
-        // Test shallow copy
+        // Probar copia superficial
         DataFrame shallowCopy = df.shallowCopy();
         if (df.getNumRow() != shallowCopy.getNumRow()) {
             System.out.println("ERROR: La copia superficial debería tener el mismo número de filas");
@@ -205,7 +205,7 @@ public class DataFrameTest {
             System.out.println("ERROR: La copia superficial debería tener el mismo número de columnas");
         }
 
-        // Test deep copy
+        // Probar copia profunda
         DataFrame deepCopy = df.copy();
         if (df.getNumRow() != deepCopy.getNumRow()) {
             System.out.println("ERROR: La copia profunda debería tener el mismo número de filas");
@@ -214,7 +214,7 @@ public class DataFrameTest {
             System.out.println("ERROR: La copia profunda debería tener el mismo número de columnas");
         }
         
-        // Modify original and verify deep copy remains unchanged
+        // Modificar original y verificar que la copia profunda no cambia
         df.setCelda(0, "age", 99);
         if (deepCopy.getCelda(0, "age").getValue().equals(99)) {
             System.out.println("ERROR: La copia profunda no debería verse afectada por cambios en el original");
@@ -222,7 +222,7 @@ public class DataFrameTest {
     }
 
     private void testConcatenation() {
-        // Test column concatenation
+        // Probar concatenación de columnas
         DataFrame other = new DataFrame();
         ArrayList<Celda<?>> scores = new ArrayList<>();
         scores.add(new Celda<>(85.5, TipoDatos.NUMBER));
@@ -245,32 +245,32 @@ public class DataFrameTest {
     }
 
     private void testExceptions() {
-        // Test invalid column access
+        // Probar acceso a columna inválida
         try {
             df.getColumn("invalid_column");
             System.out.println("ERROR: Debería lanzar una excepción para un nombre de columna inválido");
         } catch (IllegalArgumentException e) {
-            // Expected exception
+            // Excepción esperada
         }
 
-        // Test invalid data type assignment
+        // Probar asignación de tipo de dato inválido
         try {
             df.setCelda(0, "age", "not a number");
             System.out.println("ERROR: Debería lanzar una excepción para un tipo de dato inválido");
         } catch (IllegalArgumentException e) {
-            // Expected exception
+            // Excepción esperada
         }
 
-        // Test invalid row access
+        // Probar acceso a fila inválida
         try {
             df.getCelda(99, "age");
             System.out.println("ERROR: Debería lanzar una excepción para un índice de fila inválido");
         } catch (IndexOutOfBoundsException e) {
-            // Expected exception
+            // Excepción esperada
         }
     }
     
-    // Main method to run all tests
+    // Método principal para ejecutar todas las pruebas
     public static void main(String[] args) {
         DataFrameTest test = new DataFrameTest();
         
