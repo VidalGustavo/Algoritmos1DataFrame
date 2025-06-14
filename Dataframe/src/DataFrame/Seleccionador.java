@@ -213,24 +213,14 @@ public class Seleccionador {
             System.out.println(); // Salto de línea después de cada fila
         }
     }
-
-
     public static void head(DataFrame dataframe) {
         // Sobrecarga. Por defecto mostramos las primeras cinco filas
-        // encabezados
-        for (Column<Celda<?>> columna : dataframe.getColumns()) {
-            System.out.print(columna.getName() + "\t"); // Usa tabulación o formato fijo
+        int filasMostrar = 5;
+        if (filasMostrar>dataframe.getNumRow()){
+            filasMostrar = dataframe.getNumRow();
         }
-        System.out.println(); // Salto de línea después de los encabezados
-
-        // 2. Imprimir las filas solicitadas
-        for (int i = 0; i < 5; i++) {
-            for (Column<Celda<?>> columna : dataframe.getColumns()) {
-                Celda<?> celda = columna.getList().get(i);
-                System.out.print(celda.getValue() + "\t"); 
-            }
-            System.out.println(); // Salto de línea después de cada fila
-        }
+        head(dataframe, filasMostrar);
+        
     }
 
     public static void tail(DataFrame dataFrame, int cant) {

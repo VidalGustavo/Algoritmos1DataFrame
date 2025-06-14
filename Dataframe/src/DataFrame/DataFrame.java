@@ -1,14 +1,10 @@
 package DataFrame;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.stream.IntStream;
-import java.util.Map;
-import java.util.Set;
 
 import Archivos.LectorCSV;
+import Archivos.ExportadorCSV;
 import Celda.Celda;
 import Column.Column;
 import Filter.FilterPipeline;
@@ -102,7 +98,7 @@ public class DataFrame {
         // Si no tiene header, le agrega un header por defecto
         ArrayList<Celda<?>> arrayCelda = new ArrayList<>();
         if (!hasHeader) {
-            Celda celdaHeader = new Celda("Nueva Columna " + this.numCol+1, TipoDatos.STRING);
+            Celda celdaHeader = new Celda("Nueva Columna" , TipoDatos.STRING);
             arrayCelda.add(celdaHeader);
         }
         for (Object value : linealArray) {
@@ -137,17 +133,12 @@ public class DataFrame {
         numCol = columns.size();
     }
 
-    public void setNumCol(final int numCol) {
-        this.numCol = numCol;
-    }
-
     protected int colLabelToIndex(String columnLabel) {
         if (colLabel.containsKey(columnLabel)) {
             return colLabel.get(columnLabel);
         }
         throw new IllegalArgumentException("Column label not found: " + columnLabel);
     }
-
     protected int rowLabelToIndex(String rowLabelStr) {
         if (rowLabel.containsKey(rowLabelStr)) {
             return rowLabel.get(rowLabelStr);
@@ -240,6 +231,15 @@ public class DataFrame {
         int colIndex = colLabelToIndex(column);
         return getCelda(rowIndex, colIndex);
     }
+    public List<Column<Celda<?>>> getColumns() {
+        return columns;
+    }
+    public int getNumRow() {
+        return numRow;
+    }
+    public int getNumCol() {
+        return numCol;
+    }
 
     //setter de celda si ambos labels son índices numéricos
     public void setCelda(int row, int column, Object value) {
@@ -301,19 +301,6 @@ public class DataFrame {
     }
 
 
-    // métodos que cree para que funcione el expo
-    public List<Column<Celda<?>>> getColumns() {
-        return columns;
-    }
-
-    public int getNumRow() {
-        return numRow;
-    }
-
-    public int getNumCol() {
-        return numCol;
-    }
-
     //Métodos de copias:
     //Copia superficial:
     public DataFrame shallowCopy() {
@@ -357,8 +344,8 @@ public class DataFrame {
         Seleccionador.head(this);
     }
 
-    public void head(DataFrame dataframe, int cant) {
-        Seleccionador.head(dataframe, cant);
+    public void head(int cant) {
+        Seleccionador.head(this, cant);
     }
 
     public DataFrame randomSample(double porcentaje){
@@ -381,19 +368,18 @@ public class DataFrame {
         return dataframe;
     }
 
-    // metodos que estoy creando porque faltaban
-    
-
-    
-
-    
-
-    
+    public void exportarCSV(String nombreArchivo) {
+        ExportadorCSV exporter = new ExportadorCSV();
+        exporter.exportar(this, nombreArchivo);
+    }
 
     public void shape() {
         System.out.println("[" + numRow + " x " + numCol + "]");
     }
 
+    public void display(){
+        Visualizador.display(this);
+    }
     /**
      * Creates a new filter pipeline for this DataFrame
      * @return A FilterPipeline object that can be used to build and apply filters
@@ -415,15 +401,14 @@ public class DataFrame {
         System.out.println(); // Salto de línea al final
     }
 
-    public void showColumn(Column<Celda<?>> name) {
-        // Verifica si la columna existe
-        if (!columns.contains(name)) {
-            throw new IllegalArgumentException("Columna no encontrada: " + name.getName());
-        }
-        // Imprime el nombre de la columna
-        System.out.println("Columna: " + name.getName());
+    public void showColumn(String name) {
+        
+        int colIndex = colLabelToIndex(name); // Verifica si la columna existe
+        Column columna = this.getColumn(colIndex);
+        System.out.println("Columna: " + columna.getName());
         // Imprime los valores de la columna
-        for (Celda<?> celda : name.getList()) {
+        ArrayList<Celda<?>> celdas = columna.getList();
+        for (Celda<?> celda : celdas) {
             System.out.print(celda.getValue() + "\t");
         }
         System.out.println(); // Salto de línea al final
@@ -437,16 +422,20 @@ public class DataFrame {
         System.out.println(); // Salto de línea al final
     }
 
-    public void numCol(){
+    public void showNumCol(){
         // Imprime el número de columnas
         System.out.println("Número de columnas: " + numCol);
     }
 
-    public void numRow(){
+    public void showNumRow(){
         // Imprime el número de filas
         System.out.println("Número de filas: " + numRow);
     }
 
+    /**
+     * Use bajo su propio riesgo.
+     * @param numRow
+     */
     public void setNumRow(int numRow){
         this.numRow = numRow;
     }
@@ -579,7 +568,7 @@ public class DataFrame {
 
     public DataFrame concatArrays(Object[][] arrays, String[] columnNames) {
         if (columnNames.length != arrays.length) {
-            throw new IllegalArgumentException("Number of column names must match number of arrays");
+            throw new IllegalArgumentException("La cantidad de columnas suministrada debe coincidir con la de etiquetas de columnas.");
         }
 
         DataFrame result = this.copy();
@@ -594,13 +583,13 @@ public class DataFrame {
 
     public void renameCols(String[] newNames) {
         if (newNames.length != numCol) {
-            throw new IllegalArgumentException("Cantidad de nombres deb ser igual a la cantidad de columnas");
+            throw new IllegalArgumentException("Cantidad de nombres debe ser igual a la cantidad de columnas");
         }
 
         Map<String, Integer> newColLabel = new HashMap<>();
 
         for (int i = 0; i < numCol; i++) {
-            String oldName = columns.get(i).getName();
+            // String oldName = columns.get(i).getName();
             String newName = newNames[i];
 
             columns.get(i).setName(newName);
@@ -611,8 +600,23 @@ public class DataFrame {
         colLabel = newColLabel;
     }
 
-    public void display(){
-        Visualizador.display(this);
+    public void renameCol (String oldName, String newName) {
+        int index = colLabelToIndex(oldName);
+        renameCol(index, newName);
+    }
+
+    public void renameCol (int index, String newName) {
+        if (index < 0 || index >= numCol) {
+            throw new IndexOutOfBoundsException("Índice de columna inválido: " + index);
+        }
+        
+        String oldName = columns.get(index).getName();
+        columns.get(index).setName(newName);
+        if (colLabel.containsKey(newName)) {
+            throw new IllegalArgumentException("El nuevo nombre de columna ya existe: " + newName);
+        }
+        colLabel.remove(oldName);
+        colLabel.put(newName, index);
     }
 
     public void renameRows(String[] newNames) {
@@ -680,6 +684,8 @@ public class DataFrame {
         DataFrame orderedDataFrame = new DataFrame();
         orderedDataFrame.numRow = this.numRow;
         orderedDataFrame.numCol = this.numCol;
+        //TODO: corregir MAPS. dol-index, row-index.
+        // orderedDataFrame.renameCols((Array<String>)this.getColumnLabels().toArray());
         for (int i = 0; i < numCol; i++) {
             Column<Celda<?>> tempColumna = this.getColumn(i).copy();
 
@@ -694,11 +700,10 @@ public class DataFrame {
         
         return orderedDataFrame;    
     }
-    //TODO: Descomentar cuando se implemente el método colLabelToIndex
-    // public DataFrame orderBy(String columnName, boolean ascending) {
-    //     int colIndex = colLabelToIndex(columnName);
-    //     return orderBy(colIndex, ascending);
-    // }
+    public DataFrame orderBy(String columnName, boolean ascending) {
+        int colIndex = colLabelToIndex(columnName);
+        return orderBy(colIndex, ascending);
+    }
 
 
 //###############################################
@@ -750,45 +755,5 @@ public class DataFrame {
         }
         
     }
-    
-
-
-
-
-
-    public void renameCol (String oldName, String newName) {
-        if (!colLabel.containsKey(oldName)) {
-            throw new IllegalArgumentException("Columna no encontrada: " + oldName);
-        }
-        
-        int index = colLabel.get(oldName);
-        columns.get(index).setName(newName);
-        if (colLabel.containsKey(newName)) {
-            throw new IllegalArgumentException("El nuevo nombre de columna ya existe: " + newName);
-        }
-        colLabel.remove(oldName);
-        colLabel.put(newName, index);
-    }
-
-
-    public void renameCol (int index, String newName) {
-        if (index < 0 || index >= numCol) {
-            throw new IndexOutOfBoundsException("Índice de columna inválido: " + index);
-        }
-        
-        String oldName = columns.get(index).getName();
-        columns.get(index).setName(newName);
-        if (colLabel.containsKey(newName)) {
-            throw new IllegalArgumentException("El nuevo nombre de columna ya existe: " + newName);
-        
-        }
-        colLabel.remove(oldName);
-        colLabel.put(newName, index);
-    }
-
-
-
-
-
 
 }
