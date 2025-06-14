@@ -482,6 +482,16 @@ public class DataFrame {
         
         ArrayList<Celda<?>> cells = new ArrayList<>();
         for (Object value : array) {
+            TipoDatos tipoDato;
+            if (value instanceof String) {
+                tipoDato = TipoDatos.STRING;
+            } else if (value instanceof Number) {
+                tipoDato = TipoDatos.NUMBER;
+            } else if (value instanceof Boolean) {
+                tipoDato = TipoDatos.BOOLEAN;
+            } else {
+                throw new IllegalArgumentException("El valor " + value.toString() +" tiene Tipo de dato no soportado: " + value.getClass().getSimpleName());
+            }
             Celda<?> cell = new Celda<>(value);
             cells.add(cell);
         }
