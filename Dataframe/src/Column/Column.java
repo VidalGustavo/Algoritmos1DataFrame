@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import Celda.Celda;
 import DataFrame.TipoDatos;
 
-public class Column<T> {
+public class Column<T> extends ArrayList<T>{
     private ArrayList<Celda<T>> list;
     private String name;
     private int size;
@@ -31,6 +31,7 @@ public class Column<T> {
     }
 
     public Column(ArrayList<Celda<T>> list) throws IllegalArgumentException {
+        // la primera es el encavezado de la columna.
         name = String.valueOf(list.get(0).getValue());
 
         // Define tipo celda.
@@ -49,15 +50,20 @@ public class Column<T> {
                throw new IllegalArgumentException("Tipo de celda en el indice " + i + " no coincide con el tipo de columna.");
             }
         }
+        list.remove(0); // Elimina el encabezado de la columna.
         this.list = list;
-        size = list.size()-1;
+        size = list.size();
     }
 
     // Getters y Setters
     public String getName() {
-        // TODO: revisar si corresponde inmutabilidad
         String name = new String(this.name);
         return name;
+    }
+
+    @Override
+    public int size() {
+        return getSize();
     }
 
     public int getSize() {
@@ -65,12 +71,10 @@ public class Column<T> {
     }
 
     public ArrayList<Celda<T>> getList() {
-        // TODO: revisar si corresponde inmutabilidad
         return list;
     }
 
     public TipoDatos getTipoCelda() {
-        // TODO: revisar si corresponde inmutabilidad
         return tipoCelda;
     }
 
