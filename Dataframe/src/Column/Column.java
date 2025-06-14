@@ -18,6 +18,11 @@ public class Column<T> {
         size = 0;
     }
 
+    public Column(TipoDatos tipoCelda){
+        list = new ArrayList<Celda<T>>();
+        size = 0;
+    }
+
     public Column(String name, TipoDatos tipoCelda, ArrayList<Celda<T>> list) {
         this.name = name;
         this.tipoCelda = tipoCelda;
@@ -88,6 +93,7 @@ public class Column<T> {
 
     public void addCelda(Celda<T> celda){
         list.add(celda);
+        size = list.size();
     }
 
     public Column<T> copy(){
