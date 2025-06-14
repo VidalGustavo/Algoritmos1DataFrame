@@ -65,7 +65,7 @@ public class DataFrame {
 
     // public DataFrame (String) {
 
-    // }
+    // } nmmmmmmmmm n
 
     public void addColumn(Column column) {
         columns.add(column);
@@ -473,7 +473,7 @@ public class DataFrame {
 
    
     public DataFrame concatArray(Object[] array, String columnName) {
-        if (array.length != this.getNumRow()) {
+        if (array.length != getNumRow()) {
             throw new IllegalArgumentException("Array length must match DataFrame row count");
         }
 
@@ -490,13 +490,13 @@ public class DataFrame {
             } else if (value instanceof Boolean) {
                 tipoDato = TipoDatos.BOOLEAN;
             } else {
-                throw new IllegalArgumentException("El valor " + value.toString() +" tiene Tipo de dato no soportado: " + value.getClass().getSimpleName());
+                throw new IllegalArgumentException("El valor " + value.toString() + " tiene Tipo de dato no soportado: " + value.getClass().getSimpleName());
             }
             Celda<?> cell = new Celda<>(value, tipoDato);
             cells.add(cell);
         }
         
-        Column<Celda<?>> newColumn = new Column<>(columnName, cells.get(0).getClass(), cells);
+        Column newColumn = new Column(columnName, cells.get(0).getTipoDato(), cells);
         singleColumnDF.addColumn(newColumn);
         
         // Uso el método concatColumns para combinar los DataFrames

@@ -35,9 +35,9 @@ public class DataFrameTest {
         active.add(new Celda<>(false, TipoDatos.BOOLEAN));
 
         // Agregar columnas al DataFrame
-        df.addColumn(new Column<>("age", TipoDatos.NUMBER, ages));
-        df.addColumn(new Column<>("name", TipoDatos.STRING, names));
-        df.addColumn(new Column<>("active", TipoDatos.BOOLEAN, active));
+        df.addColumn(new Column("age", TipoDatos.NUMBER, ages));
+        df.addColumn(new Column("name", TipoDatos.STRING, names));
+        df.addColumn(new Column("active", TipoDatos.BOOLEAN, active));
     }
 
     private void testConstructors() {
@@ -65,12 +65,12 @@ public class DataFrameTest {
         ArrayList<Celda<?>> col1Data = new ArrayList<>();
         col1Data.add(new Celda<>(1, TipoDatos.NUMBER));
         col1Data.add(new Celda<>(2, TipoDatos.NUMBER));
-        Column<Celda<?>> col1 = new Column<>("col1", TipoDatos.NUMBER, col1Data);
+        Column<Celda<?>> col1 = new Column("col1", TipoDatos.NUMBER, col1Data);
         
         ArrayList<Celda<?>> col2Data = new ArrayList<>();
         col2Data.add(new Celda<>("a", TipoDatos.STRING));
         col2Data.add(new Celda<>("b", TipoDatos.STRING));
-        Column<Celda<?>> col2 = new Column<>("col2", TipoDatos.STRING, col2Data);
+        Column<Celda<?>> col2 = new Column("col2", TipoDatos.STRING, col2Data);
         
         columns.add(col1);
         columns.add(col2);
@@ -230,7 +230,7 @@ public class DataFrameTest {
         scores.add(new Celda<>(78.5, TipoDatos.NUMBER));
         scores.add(new Celda<>(92.5, TipoDatos.NUMBER));
         scores.add(new Celda<>(88.0, TipoDatos.NUMBER));
-        other.addColumn(new Column<>("score", TipoDatos.NUMBER, scores));
+        other.addColumn(new Column("score", TipoDatos.NUMBER, scores));
 
         DataFrame combined = df.concatColumns(other);
         if (combined.getNumCol() != df.getNumCol() + other.getNumCol()) {
