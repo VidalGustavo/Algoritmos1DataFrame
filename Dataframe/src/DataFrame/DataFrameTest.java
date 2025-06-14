@@ -10,25 +10,25 @@ public class DataFrameTest {
         
         // Crear datos de prueba con diferentes tipos de datos
         ArrayList<Celda<?>> ages = new ArrayList<>();
-        ages.add(new Celda<>(25, TipoDatos.NUMBER));
-        ages.add(new Celda<>(30, TipoDatos.NUMBER));
-        ages.add(new Celda<>(35, TipoDatos.NUMBER));
-        ages.add(new Celda<>(null, TipoDatos.NUMBER)); // Valor NA para prueba
-        ages.add(new Celda<>(45, TipoDatos.NUMBER));
+        ages.add(new Celda(25, TipoDatos.NUMBER));
+        ages.add(new Celda(30, TipoDatos.NUMBER));
+        ages.add(new Celda(35, TipoDatos.NUMBER));
+        ages.add(new Celda(null, TipoDatos.NUMBER)); // Valor NA para prueba
+        ages.add(new Celda(45, TipoDatos.NUMBER));
         
         ArrayList<Celda<?>> names = new ArrayList<>();
-        names.add(new Celda<>("Alice", TipoDatos.STRING));
-        names.add(new Celda<>("Bob", TipoDatos.STRING));
-        names.add(new Celda<>("Charlie", TipoDatos.STRING));
-        names.add(new Celda<>("David", TipoDatos.STRING));
-        names.add(new Celda<>("Eve", TipoDatos.STRING));
+        names.add(new Celda("Alice", TipoDatos.STRING));
+        names.add(new Celda("Bob", TipoDatos.STRING));
+        names.add(new Celda("Charlie", TipoDatos.STRING));
+        names.add(new Celda("David", TipoDatos.STRING));
+        names.add(new Celda("Eve", TipoDatos.STRING));
 
         ArrayList<Celda<?>> active = new ArrayList<>();
-        active.add(new Celda<>(true, TipoDatos.BOOLEAN));
-        active.add(new Celda<>(false, TipoDatos.BOOLEAN));
-        active.add(new Celda<>(true, TipoDatos.BOOLEAN));
-        active.add(new Celda<>(true, TipoDatos.BOOLEAN));
-        active.add(new Celda<>(false, TipoDatos.BOOLEAN));
+        active.add(new Celda(true, TipoDatos.BOOLEAN));
+        active.add(new Celda(false, TipoDatos.BOOLEAN));
+        active.add(new Celda(true, TipoDatos.BOOLEAN));
+        active.add(new Celda(true, TipoDatos.BOOLEAN));
+        active.add(new Celda(false, TipoDatos.BOOLEAN));
 
         // Agregar columnas al DataFrame
         df.addColumn(new Column("age", TipoDatos.NUMBER, ages));
@@ -59,13 +59,13 @@ public class DataFrameTest {
         ArrayList<ArrayList<?>> columns = new ArrayList<>();
         
         ArrayList<Celda<?>> col1Data = new ArrayList<>();
-        col1Data.add(new Celda<>(1, TipoDatos.NUMBER));
-        col1Data.add(new Celda<>(2, TipoDatos.NUMBER));
+        col1Data.add(new Celda(1, TipoDatos.NUMBER));
+        col1Data.add(new Celda(2, TipoDatos.NUMBER));
         Column<Celda<?>> col1 = new Column("col1", TipoDatos.NUMBER, col1Data);
         
         ArrayList<Celda<?>> col2Data = new ArrayList<>();
-        col2Data.add(new Celda<>("a", TipoDatos.STRING));
-        col2Data.add(new Celda<>("b", TipoDatos.STRING));
+        col2Data.add(new Celda("a", TipoDatos.STRING));
+        col2Data.add(new Celda("b", TipoDatos.STRING));
         Column<Celda<?>> col2 = new Column("col2", TipoDatos.STRING, col2Data);
         
         columns.add(col1);
@@ -221,11 +221,11 @@ public class DataFrameTest {
         // Probar concatenación de columnas
         DataFrame other = new DataFrame();
         ArrayList<Celda<?>> scores = new ArrayList<>();
-        scores.add(new Celda<>(85.5, TipoDatos.NUMBER));
-        scores.add(new Celda<>(90.0, TipoDatos.NUMBER));
-        scores.add(new Celda<>(78.5, TipoDatos.NUMBER));
-        scores.add(new Celda<>(92.5, TipoDatos.NUMBER));
-        scores.add(new Celda<>(88.0, TipoDatos.NUMBER));
+        scores.add(new Celda(85.5, TipoDatos.NUMBER));
+        scores.add(new Celda(90.0, TipoDatos.NUMBER));
+        scores.add(new Celda(78.5, TipoDatos.NUMBER));
+        scores.add(new Celda(92.5, TipoDatos.NUMBER));
+        scores.add(new Celda(88.0, TipoDatos.NUMBER));
         other.addColumn(new Column("score", TipoDatos.NUMBER, scores));
 
         DataFrame combined = df.concatColumns(other);
