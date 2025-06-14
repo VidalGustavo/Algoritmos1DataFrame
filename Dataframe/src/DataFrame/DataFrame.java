@@ -492,7 +492,7 @@ public class DataFrame {
             } else {
                 throw new IllegalArgumentException("El valor " + value.toString() +" tiene Tipo de dato no soportado: " + value.getClass().getSimpleName());
             }
-            Celda<?> cell = new Celda<>(value);
+            Celda<?> cell = new Celda<>(value, tipoDato);
             cells.add(cell);
         }
         
