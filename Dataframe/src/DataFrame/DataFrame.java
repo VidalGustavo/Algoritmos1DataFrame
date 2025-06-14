@@ -607,82 +607,86 @@ public class DataFrame {
         colLabel = newColLabel;
     }
 
-    public void display() {
-        // Verifico si el DataFrame está vacío usando los getters existentes
-        if (getNumCol() == 0 || getNumRow() == 0) {
-            System.out.println("DataFrame Vacío");
-            return;
-        }
-
-        // Calculo el ancho máximo necesario para cada columna
-        int[] columnWidths = calculateColumnWidths();
-
-        // Imprimo el separador del encabezado
-        printSeparator(columnWidths);
-
-        // Imprimo los nombres de las columnas con formato
-        printFormattedColumnNames(columnWidths);
-        System.out.println("|");
-
-        // Imprimo el separador después de los encabezados
-        printSeparator(columnWidths);
-
-        // Imprimo cada fila con formato
-        printFormattedRows(columnWidths);
-
-        // Imprimo el separador inferior
-        printSeparator(columnWidths);
-
-        // Imprimo las dimensiones del DataFrame usando el método shape()
-        System.out.print("\n");
-        shape();
-    }
-    
-    // Método auxiliar para calcular el ancho máximo necesario para cada columna
-    private int[] calculateColumnWidths() {
-        int[] columnWidths = new int[numCol];
-        for (int i = 0; i < numCol; i++) {
-            Column<Celda<?>> column = getColumn(i);
-            // Inicializo con la longitud del nombre de la columna
-            columnWidths[i] = column.getName().length();
-            
-            // Verifico la longitud de cada valor
-            for (int j = 0; j < numRow; j++) {
-                String value = String.valueOf(getCelda(j, i).getValue());
-                columnWidths[i] = Math.max(columnWidths[i], value.length());
-            }
-        }
-        return columnWidths;
-    }
-    
-    // Método auxiliar para imprimir los nombres de las columnas con formato adecuado
-    private void printFormattedColumnNames(int[] columnWidths) {
-        for (int i = 0; i < numCol; i++) {
-            String name = getColumn(i).getName();
-            System.out.print("| " + String.format("%-" + columnWidths[i] + "s", name) + " ");
-        }
-    }
-    
-    // Método auxiliar para imprimir todas las filas con formato adecuado
-    private void printFormattedRows(int[] columnWidths) {
-        for (int i = 0; i < numRow; i++) {
-            ArrayList<Celda<?>> row = getRow(i);
-            for (int j = 0; j < numCol; j++) {
-                String value = String.valueOf(row.get(j).getValue());
-                System.out.print("| " + String.format("%-" + columnWidths[j] + "s", value) + " ");
-            }
-            System.out.println("|");
-        }
+    public void display(){
+        Visualizador.display(this);
     }
 
-
-    // Método auxiliar para imprimir líneas separadoras en la tabla
-    private void printSeparator(int[] columnWidths) {
-        for (int width : columnWidths) {
-            System.out.print("+-" + "-".repeat(width) + "-");
-        }
-        System.out.println("+");
-    }
+//    public void display() {
+//        // Verifico si el DataFrame está vacío usando los getters existentes
+//        if (getNumCol() == 0 || getNumRow() == 0) {
+//            System.out.println("DataFrame Vacío");
+//            return;
+//        }
+//
+//        // Calculo el ancho máximo necesario para cada columna
+//        int[] columnWidths = calculateColumnWidths();
+//
+//        // Imprimo el separador del encabezado
+//        printSeparator(columnWidths);
+//
+//        // Imprimo los nombres de las columnas con formato
+//        printFormattedColumnNames(columnWidths);
+//        System.out.println("|");
+//
+//        // Imprimo el separador después de los encabezados
+//        printSeparator(columnWidths);
+//
+//        // Imprimo cada fila con formato
+//        printFormattedRows(columnWidths);
+//
+//        // Imprimo el separador inferior
+//        printSeparator(columnWidths);
+//
+//        // Imprimo las dimensiones del DataFrame usando el método shape()
+//        System.out.print("\n");
+//        shape();
+//    }
+//
+//    // Método auxiliar para calcular el ancho máximo necesario para cada columna
+//    private int[] calculateColumnWidths() {
+//        int[] columnWidths = new int[numCol];
+//        for (int i = 0; i < numCol; i++) {
+//            Column<Celda<?>> column = getColumn(i);
+//            // Inicializo con la longitud del nombre de la columna
+//            columnWidths[i] = column.getName().length();
+//
+//            // Verifico la longitud de cada valor
+//            for (int j = 0; j < numRow; j++) {
+//                String value = String.valueOf(getCelda(j, i).getValue());
+//                columnWidths[i] = Math.max(columnWidths[i], value.length());
+//            }
+//        }
+//        return columnWidths;
+//    }
+//
+//    // Método auxiliar para imprimir los nombres de las columnas con formato adecuado
+//    private void printFormattedColumnNames(int[] columnWidths) {
+//        for (int i = 0; i < numCol; i++) {
+//            String name = getColumn(i).getName();
+//            System.out.print("| " + String.format("%-" + columnWidths[i] + "s", name) + " ");
+//        }
+//    }
+//
+//    // Método auxiliar para imprimir todas las filas con formato adecuado
+//    private void printFormattedRows(int[] columnWidths) {
+//        for (int i = 0; i < numRow; i++) {
+//            ArrayList<Celda<?>> row = getRow(i);
+//            for (int j = 0; j < numCol; j++) {
+//                String value = String.valueOf(row.get(j).getValue());
+//                System.out.print("| " + String.format("%-" + columnWidths[j] + "s", value) + " ");
+//            }
+//            System.out.println("|");
+//        }
+//    }
+//
+//
+//    // Método auxiliar para imprimir líneas separadoras en la tabla
+//    private void printSeparator(int[] columnWidths) {
+//        for (int width : columnWidths) {
+//            System.out.print("+-" + "-".repeat(width) + "-");
+//        }
+//        System.out.println("+");
+//    }
 
     public void renameRows(String[] newNames) {
         if (newNames.length != numRow) {

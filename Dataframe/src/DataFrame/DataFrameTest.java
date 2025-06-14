@@ -60,7 +60,7 @@ public class DataFrameTest {
         }
         
         // Probar constructor con columnas
-        ArrayList<Column<?>> columns = new ArrayList<>();
+        ArrayList<ArrayList<?>> columns = new ArrayList<>();
         
         ArrayList<Celda<?>> col1Data = new ArrayList<>();
         col1Data.add(new Celda<>(1, TipoDatos.NUMBER));
