@@ -137,6 +137,10 @@ public class DataFrame {
         numCol = columns.size();
     }
 
+    public void setNumCol(final int numCol) {
+        this.numCol = numCol;
+    }
+
     protected int colLabelToIndex(String columnLabel) {
         if (colLabel.containsKey(columnLabel)) {
             return colLabel.get(columnLabel);

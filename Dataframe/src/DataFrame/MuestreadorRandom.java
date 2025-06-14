@@ -54,6 +54,7 @@ public class MuestreadorRandom {
 
             //Agrego la columna a la muestra:
             sample.addColumn(sampleColumn);
+            sample.setNumRow(numSampleRows);
         }
 
         return sample;
