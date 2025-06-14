@@ -15,18 +15,30 @@ public class Celda<T> implements Comparable<Celda<T>> {
         this.tipoDato = tipoDato;
     }
 
-    // a) Ver el valor
+    // Ver el valor
     public T getValue() {
         return value;
     }
+    // Ver si la celda está vacía
+    public Boolean getIsNA() {
+        return isNA;
+    }
+    // Ver el tipo
+    public String getTipo() {
+        if (value == null || isNA==true) return NA;
+        return value.getClass().getSimpleName();
+    }
+    public TipoDatos getTipoDato(){
+        return tipoDato;
+    }
 
-    // b) Corregir el valor
+    // Corregir el valor
     public void setValue(T value) {
         this.value = value;
         this.isNA = (value == null);
     }
 
-    // c) Imprimir el valor
+    // Imprimir el valor
     public void imprimirValor() {
         if (isNA) {
             System.out.println(NA);
@@ -35,36 +47,28 @@ public class Celda<T> implements Comparable<Celda<T>> {
         }
     }
 
-    // d) Ver el tipo
-    public String getTipo() {
-        if (value == null) return "NA";
-        return value.getClass().getSimpleName();
-    }
+    // Cambiar el estado NA
+    // public void switchNA(){
+    //     this.isNA = !this.isNA;
+    //     if (this.isNA) this.value = null;
+    // }
 
-    // e) Ver si la celda está vacía
-    public Boolean getIsNA() {
-        return isNA;
-    }
 
-    // f) Cambiar el estado NA
-    public void switchNA(){
-        this.isNA = !this.isNA;
-        if (this.isNA) this.value = null;
-    }
-
-    public TipoDatos getTipoDato(){
-        return tipoDato;
-    }
-
-    /*
-    Copia profunda
-    Asume que T es inmutable (String, booleano o número)
+    /**
+     * Copia profunda
+     * Asume que T es inmutable (String, booleano o número)
+     * 
      */
     public Celda<T> copy(){
         Celda copia = new Celda(value, tipoDato);
         return copia;
     }
 
+    /**
+     * Compara dos celdas.
+     * 
+     * Puede presentar problemas con algunso tipos de Number, ya que no tdos implementan Comparable.
+     */
     @Override
     public int compareTo(Celda<T> o) {
         // Fuera de las implementaciones de Celda vacia y tipoDato. Delega las restricciones de compareTo al tipo de dato.
@@ -76,19 +80,16 @@ public class Celda<T> implements Comparable<Celda<T>> {
         } else if (o.isNA) {
             return 1; // Cualquier otro valor es mayor que NA
         }
-        
-        if (this.value instanceof Comparable) {
-            if (this.tipoDato == TipoDatos.NUMBER) {
+        if (this.tipoDato == TipoDatos.NUMBER) {
                 // Number no implementa Comparable -.-"
                 Number este = (Number) this.value;
                 Number otro = (Number) o.value;
                 return ((Double) (este.doubleValue())).compareTo((Double) otro.doubleValue());
             }
+        if (this.value instanceof Comparable) {
             return ((Comparable) this.value).compareTo(o.value);
         } else {
             throw new ClassCastException("El valor de la celda no es comparable. Los tipos de datos deben implementar Comparable.");
         }
-
     }
-    
 }
