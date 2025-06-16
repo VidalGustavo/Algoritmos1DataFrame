@@ -128,10 +128,11 @@ public class DataFrame {
 
 
 
-    public void addColumn(Column column) {
+public void addColumn(Column column) {
         columns.add(column);
         colLabel.put(column.getName(), columns.size() - 1);
         numCol = columns.size();
+        numRow = column.size();
     }
 
     public int colLabelToIndex(String columnLabel) {
@@ -737,6 +738,8 @@ public class DataFrame {
         
         // Crea una lista de celdas a partir de la lista proporcionada
         ArrayList<Celda<?>> celdas = new ArrayList<>();
+        Celda encabezado = new Celda(name, TipoDatos.STRING);
+        celdas.add(encabezado);
         for (Object element : list) {
             TipoDatos tipoDato;
             if (element instanceof String) {
@@ -750,10 +753,12 @@ public class DataFrame {
             }
             
             
-            Celda celda = new Celda(element, tipoDato);
-            celdas.add(celda);
-        
+            Celda<?> celda = new Celda<>(element, tipoDato);
+            celdas.add(celda);        
         }
+
+        Column columna = new Column(celdas);
+        this.addColumn(columna);
         
     }
 

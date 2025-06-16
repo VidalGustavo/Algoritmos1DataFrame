@@ -55,20 +55,16 @@ public class FilterPipeline {
         }
 
         // Solo mantiene las filas que cumplen todas las condiciones
-        for (int i = 0; i < df.getNumRow(); i++) {
-            boolean rowMatches = true;
+        for (int i = df.getNumRow()-1; i >= 0; i--) {
+            // boolean rowMatches = true;
             for (FilterCondition condition : conditions) {
                 if (!condition.evaluate(df, i)) {
-                    rowMatches = false;
+                    // rowMatches = false;
+                    result.deleteRow(i);
                     break;
                 }
             }
-            if (!rowMatches) {
-                // Elimina la fila de todas las columnas si no cumple las condiciones
-                for (int j = 0; j < df.getNumCol(); j++) {
-                    result.getColumn(j).getList().remove(result.getNumRow() - 1);
-                }
-            }
+
         }
 
         return result;
